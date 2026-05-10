@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
-DATABASE_URL="$DATABASE_URL" npx prisma db push --accept-data-loss --schema=prisma/schema.prisma
+npx prisma db push --accept-data-loss --url="$DATABASE_URL"
 exec node server.js
