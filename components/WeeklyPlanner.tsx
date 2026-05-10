@@ -48,13 +48,19 @@ export default function WeeklyPlanner() {
 
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [a, n] = await Promise.all([
-      fetch(`/api/routine?day=${dayOfWeek}`).then((r) => r.json()),
-      fetch(`/api/notes?date=${dateStr}`).then((r) => r.json()),
-    ]);
-    setActivities(a);
-    setNotes(n);
-    setLoading(false);
+    try {
+      const [a, n] = await Promise.all([
+        fetch(`/api/routine?day=${dayOfWeek}`).then((r) => r.json()),
+        fetch(`/api/notes?date=${dateStr}`).then((r) => r.json()),
+      ]);
+      setActivities(Array.isArray(a) ? a : []);
+      setNotes(Array.isArray(n) ? n : []);
+    } catch {
+      setActivities([]);
+      setNotes([]);
+    } finally {
+      setLoading(false);
+    }
   }, [dayOfWeek, dateStr]);
 
   useEffect(() => {
@@ -63,10 +69,12 @@ export default function WeeklyPlanner() {
 
   useEffect(() => {
     if (!seeded) {
-      fetch("/api/seed", { method: "POST" }).then(() => {
-        setSeeded(true);
-        fetchData();
-      });
+      fetch("/api/seed", { method: "POST" })
+        .catch(() => {})
+        .finally(() => {
+          setSeeded(true);
+          fetchData();
+        });
     }
   }, [seeded, fetchData]);
 
