@@ -7,10 +7,12 @@ export async function POST(
 ) {
   const { id } = await params;
   const body = await req.json();
-  const log = await prisma.habitLog.upsert({
-    where: { habitId_date: { habitId: id, date: new Date(body.date) } },
+
+  const completion = await prisma.activityCompletion.upsert({
+    where: { activityId_date: { activityId: id, date: new Date(body.date) } },
     update: { done: body.done },
-    create: { habitId: id, date: new Date(body.date), done: body.done },
+    create: { activityId: id, date: new Date(body.date), done: body.done },
   });
-  return NextResponse.json(log);
+
+  return NextResponse.json(completion);
 }

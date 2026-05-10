@@ -7,11 +7,12 @@ export async function PATCH(
 ) {
   const { id } = await params;
   const body = await req.json();
-  const task = await prisma.task.update({
+  const activity = await prisma.routineActivity.update({
     where: { id },
-    data: body,
+    data: { title: body.title },
+    include: { completions: true },
   });
-  return NextResponse.json(task);
+  return NextResponse.json(activity);
 }
 
 export async function DELETE(
@@ -19,6 +20,6 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  await prisma.task.delete({ where: { id } });
+  await prisma.routineActivity.delete({ where: { id } });
   return new NextResponse(null, { status: 204 });
 }
