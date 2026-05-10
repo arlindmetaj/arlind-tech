@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime @db.Date
+  completed   Boolean  @default(false)
+  priority    Priority @default(MEDIUM)
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  content   String
+  date      DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Habit {
+  id        String        @id @default(cuid())
+  name      String
+  logs      HabitLog[]
+  createdAt DateTime      @default(now())
+}
+
+model HabitLog {
+  id        String   @id @default(cuid())
+  habitId   String
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  done      Boolean  @default(false)
+
+  @@unique([habitId, date])
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
