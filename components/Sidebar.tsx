@@ -3,27 +3,44 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import {
+  User,
+  Briefcase,
+  FolderOpen,
+  PenLine,
+  Mic2,
+  Mail,
+  CalendarDays,
+  CheckSquare,
+  Target,
+  Lightbulb,
+  BookOpen,
+  Bookmark,
+  Sun,
+  Moon,
+  Lock,
+} from "lucide-react";
 
 interface SidebarProps {
   loggedIn: boolean;
 }
 
 const publicNav = [
-  { href: "/", label: "About", icon: "◇" },
-  { href: "/work", label: "Work", icon: "◇" },
-  { href: "/projects", label: "Projects", icon: "◇" },
-  { href: "/writing", label: "Writing", icon: "◇" },
-  { href: "/talks", label: "Talks", icon: "◇" },
-  { href: "/contact", label: "Contact", icon: "◇" },
+  { href: "/", label: "About", Icon: User },
+  { href: "/work", label: "Work", Icon: Briefcase },
+  { href: "/projects", label: "Projects", Icon: FolderOpen },
+  { href: "/writing", label: "Writing", Icon: PenLine },
+  { href: "/talks", label: "Talks", Icon: Mic2 },
+  { href: "/contact", label: "Contact", Icon: Mail },
 ];
 
 const privateNav = [
-  { href: "/w/week", label: "This week", icon: "▦" },
-  { href: "/w/todos", label: "Todos", icon: "✓" },
-  { href: "/w/goals", label: "Goals", icon: "◎" },
-  { href: "/w/ideas", label: "Ideas", icon: "✦" },
-  { href: "/w/books", label: "Books", icon: "📖" },
-  { href: "/w/bookmarks", label: "Bookmarks", icon: "↗" },
+  { href: "/w/week", label: "This week", Icon: CalendarDays },
+  { href: "/w/todos", label: "Todos", Icon: CheckSquare },
+  { href: "/w/goals", label: "Goals", Icon: Target },
+  { href: "/w/ideas", label: "Ideas", Icon: Lightbulb },
+  { href: "/w/books", label: "Books", Icon: BookOpen },
+  { href: "/w/bookmarks", label: "Bookmarks", Icon: Bookmark },
 ];
 
 export default function Sidebar({ loggedIn }: SidebarProps) {
@@ -106,7 +123,7 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
                   fontWeight: active ? 500 : 400,
                 }}
               >
-                <span style={{ color: "var(--dim)", fontSize: 12 }}>{item.icon}</span>
+                <item.Icon size={14} style={{ color: active ? "var(--accent)" : "var(--dim)", flexShrink: 0 }} />
                 {item.label}
               </Link>
             );
@@ -133,9 +150,9 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
                   opacity: loggedIn ? 1 : 0.6,
                 }}
               >
-                <span style={{ fontSize: 12 }}>{item.icon}</span>
+                <item.Icon size={14} style={{ color: active ? "var(--accent)" : "var(--dim)", flexShrink: 0 }} />
                 {item.label}
-                {!loggedIn && <span className="ml-auto text-xs">🔒</span>}
+                {!loggedIn && <Lock size={11} className="ml-auto" style={{ color: "var(--dim)" }} />}
               </button>
             );
           })}
@@ -149,11 +166,12 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
       >
         <button
           onClick={toggleDark}
-          className="text-xs px-2 py-1 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 text-xs px-2 py-1 rounded-lg transition-colors"
           style={{ color: "var(--dim)", background: "var(--hi)" }}
           title="Toggle dark mode"
         >
-          {dark ? "☀ Light" : "☾ Dark"}
+          {dark ? <Sun size={12} /> : <Moon size={12} />}
+          {dark ? "Light" : "Dark"}
         </button>
         {loggedIn && (
           <button
