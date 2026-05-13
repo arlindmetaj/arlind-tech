@@ -1,12 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --bg: #f8fafc;
+  --ink: #1c1b18;
+  --dim: #6a675f;
+  --line: #e2e0d8;
+  --accent: #c2410c;
+  --hi: #f1ecd6;
+}
+
+.dark {
+  --bg: #14130f;
+  --ink: #ece9df;
+  --dim: #8a8780;
+  --line: #2a2824;
+  --accent: #ea6c3a;
+  --hi: #1e1c17;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  transition: background 0.2s, color 0.2s;
+}
+
+.font-caveat {
+  font-family: var(--font-caveat), cursive;
+}
+
+* {
+  box-sizing: border-box;
 }
