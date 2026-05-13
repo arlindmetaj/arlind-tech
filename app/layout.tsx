@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Weekly Planner — arlind.tech",
-  description: "Track your daily activities, tasks, and habits",
+  title: "arlind.tech",
+  description: "Arlind's personal space",
 };
 
 export default function RootLayout({

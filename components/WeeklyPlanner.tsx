@@ -145,7 +145,7 @@ export default function WeeklyPlanner() {
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Weekly Planner</h1>
+          <h1 className="text-2xl font-bold text-slate-900">arlind.tech</h1>
           <p className="text-sm text-slate-400 mt-0.5">{format(new Date(), "MMMM yyyy")}</p>
         </div>
         <div className="flex gap-2">
