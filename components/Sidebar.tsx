@@ -71,13 +71,18 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
       }}
     >
       {/* Logo */}
-      <div className="px-5 py-5" style={{ borderBottom: "1px solid var(--line)" }}>
-        <Link
-          href="/"
-          className="text-lg font-semibold tracking-tight transition-opacity hover:opacity-70"
-          style={{ color: "var(--ink)", fontFamily: "'Caveat', cursive", fontSize: 22 }}
-        >
-          arlind.tech
+      <div className="px-4 py-4" style={{ borderBottom: "1px solid var(--line)" }}>
+        <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-75">
+          <img
+            src={dark ? "/logo-light.svg" : "/logo.svg"}
+            alt="arlind.tech"
+            width={28}
+            height={28}
+            style={{ borderRadius: 6 }}
+          />
+          <span style={{ color: "var(--ink)", fontFamily: "'Caveat', cursive", fontSize: 20, lineHeight: 1 }}>
+            arlind.tech
+          </span>
         </Link>
       </div>
 
