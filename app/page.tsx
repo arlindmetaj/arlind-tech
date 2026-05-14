@@ -19,7 +19,7 @@ export default async function AboutPage() {
               Arlind Metaj
             </h1>
             <p className="mt-2 text-lg" style={{ color: "var(--dim)" }}>
-              Mobile &amp; Frontend Developer
+              engineer · writer · maker of things
             </p>
           </div>
 
@@ -36,35 +36,55 @@ export default async function AboutPage() {
             ))}
           </div>
 
-          {/* Bio */}
-          <div className="space-y-3">
-            <p style={{ color: "var(--ink)", lineHeight: 1.75 }}>
-              Experienced Mobile and Frontend Developer with a strong focus on cross-platform
-              development. Proficient in Flutter, React Native, React, Next.js, Expo, and SwiftUI —
-              building robust and intuitive applications for mobile and web.
-            </p>
-            <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
-              Skilled in designing, developing, and deploying scalable solutions across multiple
-              platforms, with a strong emphasis on performance, maintainability, and user experience.
-              Adaptable to new technologies, with a proven ability to contribute to high-quality,
-              production-ready projects.
-            </p>
-          </div>
+          {/* Bio + Stack */}
+          <div className="flex flex-col gap-10 sm:flex-row sm:gap-12">
+            {/* Bio */}
+            <div className="flex-1 space-y-4 min-w-0">
+              <p style={{ color: "var(--ink)", lineHeight: 1.75 }}>
+                I build software, write about ideas, and spend a lot of time tinkering with things.
+              </p>
+              <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
+                Over the past few years, I've worked across mobile and web, taking products from early
+                wireframes to production. Somewhere along that process, my focus shifted. I'm still
+                interested in how things are built, but more in why they're built the way they are,
+                the decisions, trade-offs, and constraints behind them.
+              </p>
+              <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
+                I care about simplicity. Not because minimalism is fashionable, but because complexity
+                compounds. Every extra layer is something someone has to understand, maintain, and
+                eventually remove. I try to build things that are clear, predictable, and easy to
+                reason about, both in code and in product.
+              </p>
+              <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
+                Most of my time goes into reading, thinking, and trying to understand how things work,
+                from systems to decisions to product. I travel when I can, notice details others skip,
+                and write occasionally to make sense of ideas.
+              </p>
+            </div>
 
-          {/* Skills */}
-          <div>
-            <h2 className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--dim)" }}>
-              Stack
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {["Flutter", "React Native", "React", "Next.js", "Expo", "SwiftUI", "Dart", "Java"].map((skill) => (
-                <span
-                  key={skill}
-                  className="px-3 py-1 rounded-lg text-sm"
-                  style={{ background: "var(--hi)", color: "var(--ink)", border: "1px solid var(--line)" }}
-                >
-                  {skill}
-                </span>
+            {/* Stack */}
+            <div className="shrink-0 space-y-5 sm:w-40">
+              {[
+                { label: "Mobile", items: ["Flutter", "React Native", "Expo", "SwiftUI"] },
+                { label: "Frontend", items: ["React", "Next.js"] },
+                { label: "Languages", items: ["Dart", "Java"] },
+              ].map(({ label, items }) => (
+                <div key={label}>
+                  <h2 className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: "var(--dim)" }}>
+                    {label}
+                  </h2>
+                  <div className="flex flex-wrap gap-1.5">
+                    {items.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-2.5 py-1 rounded-lg text-xs"
+                        style={{ background: "var(--hi)", color: "var(--ink)", border: "1px solid var(--line)" }}
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>

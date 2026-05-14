@@ -3,7 +3,7 @@ import { getSessionFromCookies } from "@/lib/auth";
 
 const experience = [
   {
-    role: "Mobile & Frontend Developer",
+    role: "Software Engineer",
     company: "Ritech International AG",
     period: "June 2024 – Present",
     location: "Tirana, Albania",
@@ -31,7 +31,7 @@ const experience = [
     ],
   },
   {
-    role: "Software Developer",
+    role: "Mobile Developer",
     company: "Almotech",
     period: "July 2021 – June 2022",
     location: "Tirana, Albania",
@@ -44,7 +44,7 @@ const experience = [
     ],
   },
   {
-    role: "Software Developer",
+    role: "Mobile Developer",
     company: "Rubik Technologies",
     period: "June 2020 – February 2021",
     location: "Tirana, Albania",
@@ -74,10 +74,7 @@ export default async function WorkPage() {
     <Shell loggedIn={loggedIn}>
       <div className="max-w-2xl">
         <h1 className="font-caveat" style={{ fontSize: 56, color: "var(--ink)" }}>Work</h1>
-        <p className="mt-1 mb-8 text-base" style={{ color: "var(--dim)" }}>
-          4+ years building mobile and web products
-        </p>
-        <div style={{ borderTop: "1px solid var(--line)" }} />
+        <div className="mt-1 mb-8" style={{ borderTop: "1px solid var(--line)" }} />
 
         {/* Experience */}
         <div className="mt-10 space-y-12">
