@@ -19,10 +19,13 @@ import {
   Sun,
   Moon,
   Lock,
+  X,
 } from "lucide-react";
 
 interface SidebarProps {
   loggedIn: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const publicNav = [
@@ -41,7 +44,7 @@ const privateNav = [
   { href: "/w/bookmarks", label: "Bookmarks", Icon: Bookmark },
 ];
 
-export default function Sidebar({ loggedIn }: SidebarProps) {
+export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [dark, setDark] = useState(false);
@@ -63,6 +66,7 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
   }
 
   function handlePrivateClick(href: string) {
+    onClose?.();
     if (!loggedIn) {
       router.push(`/?signin=&next=${encodeURIComponent(href)}`);
     } else {
@@ -78,7 +82,8 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
 
   return (
     <aside
-      className="fixed top-0 left-0 h-full flex flex-col z-30"
+      className={`fixed top-0 left-0 h-full flex flex-col z-30 transition-transform duration-200 ease-in-out
+        ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       style={{
         width: 220,
         background: "var(--bg)",
@@ -86,8 +91,8 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
       }}
     >
       {/* Logo */}
-      <div className="px-4 py-4" style={{ borderBottom: "1px solid var(--line)" }}>
-        <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-75">
+      <div className="px-4 py-4 flex items-center justify-between" style={{ borderBottom: "1px solid var(--line)" }}>
+        <Link href="/" onClick={onClose} className="flex items-center gap-2.5 transition-opacity hover:opacity-75">
           <img
             src={dark ? "/logo-light.svg" : "/logo.svg"}
             alt="arlind.tech"
@@ -99,6 +104,14 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
             arlind.tech
           </span>
         </Link>
+        <button
+          className="lg:hidden flex items-center justify-center"
+          onClick={onClose}
+          style={{ color: "var(--dim)" }}
+          aria-label="Close menu"
+        >
+          <X size={16} />
+        </button>
       </div>
 
       {/* Nav */}
@@ -114,6 +127,7 @@ export default function Sidebar({ loggedIn }: SidebarProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={onClose}
                 className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors"
                 style={{
                   color: active ? "var(--accent)" : "var(--ink)",
