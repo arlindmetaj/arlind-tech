@@ -29,8 +29,6 @@ const publicNav = [
   { href: "/", label: "About", Icon: User },
   { href: "/work", label: "Work", Icon: Briefcase },
   { href: "/projects", label: "Projects", Icon: FolderOpen },
-  { href: "/writing", label: "Writing", Icon: PenLine },
-  { href: "/talks", label: "Talks", Icon: Mic2 },
   { href: "/contact", label: "Contact", Icon: Mail },
 ];
 
