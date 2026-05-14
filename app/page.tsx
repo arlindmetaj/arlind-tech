@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Shell from "@/components/Shell";
 import SignInPopover from "@/components/SignInPopover";
+import GitHubGraph from "@/components/GitHubGraph";
 import { getSessionFromCookies } from "@/lib/auth";
 
 export default async function AboutPage() {
@@ -116,6 +117,23 @@ export default async function AboutPage() {
                 <div className="text-sm mt-1" style={{ color: "var(--dim)" }}>+355 69 326 0462 · Tirana, Albania</div>
               </a>
             </div>
+          </div>
+          {/* GitHub */}
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: "var(--dim)" }}>
+              GitHub
+            </h2>
+            <GitHubGraph username="arlindmetaj" />
+            <p className="mt-2 text-xs" style={{ color: "var(--dim)" }}>
+              <a
+                href="https://github.com/arlindmetaj"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-70"
+              >
+                github.com/arlindmetaj
+              </a>
+            </p>
           </div>
         </div>
       </Shell>
