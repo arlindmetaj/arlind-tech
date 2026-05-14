@@ -7,8 +7,6 @@ import {
   User,
   Briefcase,
   FolderOpen,
-  PenLine,
-  Mic2,
   Mail,
   CalendarDays,
   CheckSquare,
@@ -67,11 +65,7 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
 
   function handlePrivateClick(href: string) {
     onClose?.();
-    if (!loggedIn) {
-      router.push(`/?signin=&next=${encodeURIComponent(href)}`);
-    } else {
-      router.push(href);
-    }
+    router.push(href);
   }
 
   async function signOut() {
@@ -115,11 +109,11 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+      <nav className="flex-1 overflow-y-auto px-3 py-4">
         {/* Public */}
         <div>
           <p className="px-2 mb-1.5 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--dim)" }}>
-            Public · Resume
+            Menu
           </p>
           {publicNav.map((item) => {
             const active = pathname === item.href;
@@ -142,33 +136,32 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
           })}
         </div>
 
-        {/* Private */}
-        <div>
-          <p className="px-2 mb-1.5 text-xs font-semibold uppercase tracking-widest flex items-center gap-1" style={{ color: "var(--dim)" }}>
-            Private · Dashboard
-            {!loggedIn && <span className="ml-1">🔒</span>}
-          </p>
-          {privateNav.map((item) => {
-            const active = pathname === item.href || (item.href === "/w/week" && pathname === "/w");
-            return (
-              <button
-                key={item.href}
-                onClick={() => handlePrivateClick(item.href)}
-                className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors text-left"
-                style={{
-                  color: active ? "var(--accent)" : loggedIn ? "var(--ink)" : "var(--dim)",
-                  background: active ? "var(--hi)" : "transparent",
-                  fontWeight: active ? 500 : 400,
-                  opacity: loggedIn ? 1 : 0.6,
-                }}
-              >
-                <item.Icon size={14} style={{ color: active ? "var(--accent)" : "var(--dim)", flexShrink: 0 }} />
-                {item.label}
-                {!loggedIn && <Lock size={11} className="ml-auto" style={{ color: "var(--dim)" }} />}
-              </button>
-            );
-          })}
-        </div>
+        {/* Private — only visible when logged in */}
+        {loggedIn && (
+          <div className="mt-5">
+            <p className="px-2 mb-1.5 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--dim)" }}>
+              Dashboard
+            </p>
+            {privateNav.map((item) => {
+              const active = pathname === item.href || (item.href === "/w/week" && pathname === "/w");
+              return (
+                <button
+                  key={item.href}
+                  onClick={() => handlePrivateClick(item.href)}
+                  className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors text-left"
+                  style={{
+                    color: active ? "var(--accent)" : "var(--ink)",
+                    background: active ? "var(--hi)" : "transparent",
+                    fontWeight: active ? 500 : 400,
+                  }}
+                >
+                  <item.Icon size={14} style={{ color: active ? "var(--accent)" : "var(--dim)", flexShrink: 0 }} />
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </nav>
 
       {/* Bottom bar */}
@@ -185,6 +178,23 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
           {dark ? <Sun size={12} /> : <Moon size={12} />}
           {dark ? "Light" : "Dark"}
         </button>
+
+        {/* Subtle sign-in trigger — visible only when logged out */}
+        {!loggedIn && (
+          <button
+            onClick={() => { onClose?.(); router.push("/?signin="); }}
+            aria-label="Sign in"
+            title="Sign in"
+            className="flex items-center justify-center rounded-md p-1.5 transition-opacity"
+            style={{ color: "var(--dim)", opacity: 0.25 }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = "0.6")}
+            onMouseLeave={e => (e.currentTarget.style.opacity = "0.25")}
+          >
+            <Lock size={13} />
+          </button>
+        )}
+
+        {/* Sign out — visible only when logged in */}
         {loggedIn && (
           <button
             onClick={signOut}
