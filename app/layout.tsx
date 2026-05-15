@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full ${caveat.variable}`}>
+    <html lang="en" className={`h-full scroll-smooth ${caveat.variable}`}>
       <body className="min-h-full antialiased">{children}</body>
     </html>
   );

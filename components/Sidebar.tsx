@@ -4,10 +4,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
-  User,
-  Briefcase,
-  FolderOpen,
-  Mail,
   CalendarDays,
   CheckSquare,
   Target,
@@ -16,7 +12,6 @@ import {
   Bookmark,
   Sun,
   Moon,
-  Lock,
   X,
 } from "lucide-react";
 
@@ -25,13 +20,6 @@ interface SidebarProps {
   isOpen?: boolean;
   onClose?: () => void;
 }
-
-const publicNav = [
-  { href: "/", label: "About", Icon: User },
-  { href: "/work", label: "Work", Icon: Briefcase },
-  { href: "/projects", label: "Projects", Icon: FolderOpen },
-  { href: "/contact", label: "Contact", Icon: Mail },
-];
 
 const privateNav = [
   { href: "/w/week", label: "This week", Icon: CalendarDays },
@@ -49,7 +37,9 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
-    const isDark = saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    const isDark =
+      saved === "dark" ||
+      (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches);
     setDark(isDark);
     if (isDark) document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
@@ -61,11 +51,6 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
     localStorage.setItem("theme", next ? "dark" : "light");
     if (next) document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
-  }
-
-  function handlePrivateClick(href: string) {
-    onClose?.();
-    router.push(href);
   }
 
   async function signOut() {
@@ -85,8 +70,15 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
       }}
     >
       {/* Logo */}
-      <div className="px-4 py-4 flex items-center justify-between" style={{ borderBottom: "1px solid var(--line)" }}>
-        <Link href="/" onClick={onClose} className="flex items-center gap-2.5 transition-opacity hover:opacity-75">
+      <div
+        className="px-4 py-4 flex items-center justify-between"
+        style={{ borderBottom: "1px solid var(--line)" }}
+      >
+        <Link
+          href="/"
+          onClick={onClose}
+          className="flex items-center gap-2.5 transition-opacity hover:opacity-75"
+        >
           <img
             src={dark ? "/logo-light.svg" : "/logo.svg"}
             alt="arlind.tech"
@@ -94,7 +86,14 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
             height={28}
             style={{ borderRadius: 6 }}
           />
-          <span style={{ color: "var(--ink)", fontFamily: "'Caveat', cursive", fontSize: 20, lineHeight: 1 }}>
+          <span
+            style={{
+              color: "var(--ink)",
+              fontFamily: "'Caveat', cursive",
+              fontSize: 20,
+              lineHeight: 1,
+            }}
+          >
             arlind.tech
           </span>
         </Link>
@@ -110,58 +109,41 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-3 py-4">
-        {/* Public */}
-        <div>
-          <p className="px-2 mb-1.5 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--dim)" }}>
-            Menu
-          </p>
-          {publicNav.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors"
+        <p
+          className="px-2 mb-1.5 text-xs font-semibold uppercase tracking-widest"
+          style={{ color: "var(--dim)" }}
+        >
+          Dashboard
+        </p>
+        {privateNav.map((item) => {
+          const active =
+            pathname === item.href ||
+            (item.href === "/w/week" && pathname === "/w");
+          return (
+            <button
+              key={item.href}
+              onClick={() => {
+                onClose?.();
+                router.push(item.href);
+              }}
+              className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors text-left"
+              style={{
+                color: active ? "var(--accent)" : "var(--ink)",
+                background: active ? "var(--hi)" : "transparent",
+                fontWeight: active ? 500 : 400,
+              }}
+            >
+              <item.Icon
+                size={14}
                 style={{
-                  color: active ? "var(--accent)" : "var(--ink)",
-                  background: active ? "var(--hi)" : "transparent",
-                  fontWeight: active ? 500 : 400,
+                  color: active ? "var(--accent)" : "var(--dim)",
+                  flexShrink: 0,
                 }}
-              >
-                <item.Icon size={14} style={{ color: active ? "var(--accent)" : "var(--dim)", flexShrink: 0 }} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Private — only visible when logged in */}
-        {loggedIn && (
-          <div className="mt-5">
-            <p className="px-2 mb-1.5 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--dim)" }}>
-              Dashboard
-            </p>
-            {privateNav.map((item) => {
-              const active = pathname === item.href || (item.href === "/w/week" && pathname === "/w");
-              return (
-                <button
-                  key={item.href}
-                  onClick={() => handlePrivateClick(item.href)}
-                  className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors text-left"
-                  style={{
-                    color: active ? "var(--accent)" : "var(--ink)",
-                    background: active ? "var(--hi)" : "transparent",
-                    fontWeight: active ? 500 : 400,
-                  }}
-                >
-                  <item.Icon size={14} style={{ color: active ? "var(--accent)" : "var(--dim)", flexShrink: 0 }} />
-                  {item.label}
-                </button>
-              );
-            })}
-          </div>
-        )}
+              />
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
 
       {/* Bottom bar */}
@@ -178,27 +160,10 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
           {dark ? <Sun size={12} /> : <Moon size={12} />}
           {dark ? "Light" : "Dark"}
         </button>
-
-        {/* Subtle sign-in trigger — visible only when logged out */}
-        {!loggedIn && (
-          <button
-            onClick={() => { onClose?.(); router.push("/?signin="); }}
-            aria-label="Sign in"
-            title="Sign in"
-            className="flex items-center justify-center rounded-md p-1.5 transition-opacity"
-            style={{ color: "var(--dim)", opacity: 0.25 }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = "0.6")}
-            onMouseLeave={e => (e.currentTarget.style.opacity = "0.25")}
-          >
-            <Lock size={13} />
-          </button>
-        )}
-
-        {/* Sign out — visible only when logged in */}
         {loggedIn && (
           <button
             onClick={signOut}
-            className="text-xs px-2 py-1 rounded-lg transition-colors"
+            className="text-xs px-2 py-1 rounded-lg transition-colors hover:opacity-70"
             style={{ color: "var(--dim)" }}
           >
             Sign out
