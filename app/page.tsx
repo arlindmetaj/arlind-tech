@@ -198,13 +198,13 @@ export default function HomePage() {
             <div className="space-y-4">
               <p style={{ color: "var(--ink)", lineHeight: 1.75 }}>
                 I'm less interested in what AI can do today and more in where it's heading. The
-                trajectory feels significant — not just as a new category of tool, but as a shift
+                trajectory feels significant, not just as a new category of tool, but as a shift
                 in how software gets built and what becomes worth building. I think most people are
                 still calibrating to the current moment rather than the direction.
               </p>
               <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
-                I try to stay close to it by using it rather than just reading about it. Less
-                opinion from the outside, more understanding from the inside.
+                For anyone building software, the interesting question isn't whether to engage with
+                it, it's how to think about it clearly enough to make good decisions with it.
               </p>
             </div>
             <div>
