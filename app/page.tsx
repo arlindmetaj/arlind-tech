@@ -58,7 +58,7 @@ const experience = [
 const stack = {
   Mobile: ["Flutter", "React Native", "Expo", "SwiftUI"],
   Frontend: ["React", "Next.js"],
-  Languages: ["Dart", "Java"],
+  Languages: ["Dart", "Java", "JavaScript", "TypeScript"],
 };
 
 export default function HomePage() {
