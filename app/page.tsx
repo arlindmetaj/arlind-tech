@@ -187,6 +187,53 @@ export default function HomePage() {
 
           <div style={{ borderTop: "1px solid var(--line)" }} />
 
+          {/* ── AI ─────────────────────────────────────── */}
+          <section id="ai" className="space-y-6">
+            <h2
+              className="font-caveat"
+              style={{ fontSize: 48, lineHeight: 1.1, color: "var(--ink)" }}
+            >
+              AI
+            </h2>
+            <div className="space-y-4">
+              <p style={{ color: "var(--ink)", lineHeight: 1.75 }}>
+                I'm less interested in what AI can do today and more in where it's heading. The
+                trajectory feels significant — not just as a new category of tool, but as a shift
+                in how software gets built and what becomes worth building. I think most people are
+                still calibrating to the current moment rather than the direction.
+              </p>
+              <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
+                I try to stay close to it by using it rather than just reading about it. Less
+                opinion from the outside, more understanding from the inside.
+              </p>
+            </div>
+            <div>
+              <h3
+                className="text-xs font-semibold uppercase tracking-widest mb-3"
+                style={{ color: "var(--dim)" }}
+              >
+                Tools I use
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {["Claude", "Perplexity", "Cursor"].map((tool) => (
+                  <span
+                    key={tool}
+                    className="px-2.5 py-1 rounded-lg text-sm"
+                    style={{
+                      background: "var(--hi)",
+                      color: "var(--ink)",
+                      border: "1px solid var(--line)",
+                    }}
+                  >
+                    {tool}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <div style={{ borderTop: "1px solid var(--line)" }} />
+
           {/* ── Work ───────────────────────────────────── */}
           <section id="work" className="space-y-10">
             <h2
