@@ -1,15 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest } from "next/server";
+import { apiFetch, proxy } from "@/lib/api";
 
 export async function GET() {
-  const ideas = await prisma.idea.findMany({ orderBy: { createdAt: "desc" } });
-  return NextResponse.json(ideas);
+  return proxy(await apiFetch("/ideas"));
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const idea = await prisma.idea.create({
-    data: { content: body.content, tags: body.tags ?? [] },
-  });
-  return NextResponse.json(idea, { status: 201 });
+  return proxy(await apiFetch("/ideas", { method: "POST", body: await req.text() }));
 }

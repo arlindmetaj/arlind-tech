@@ -1,21 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest } from "next/server";
+import { apiFetch, proxy } from "@/lib/api";
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const body = await req.json();
-  const note = await prisma.note.update({ where: { id }, data: body });
-  return NextResponse.json(note);
+  return proxy(await apiFetch(`/notes/${id}`, { method: "PATCH", body: await req.text() }));
 }
 
-export async function DELETE(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  await prisma.note.delete({ where: { id } });
-  return new NextResponse(null, { status: 204 });
+  return proxy(await apiFetch(`/notes/${id}`, { method: "DELETE" }));
 }

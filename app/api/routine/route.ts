@@ -1,36 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest } from "next/server";
+import { apiFetch, proxy } from "@/lib/api";
 
-// GET /api/routine?day=1  (1=Mon..7=Sun, isoWeekday)
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const day = searchParams.get("day");
-
-  const activities = await prisma.routineActivity.findMany({
-    where: day ? { dayOfWeek: parseInt(day) } : undefined,
-    include: { completions: true },
-    orderBy: { order: "asc" },
-  });
-
-  return NextResponse.json(activities);
+  const day = new URL(req.url).searchParams.get("day");
+  return proxy(await apiFetch(`/routine${day ? `?day=${day}` : ""}`));
 }
 
-// POST /api/routine  — add activity to a day
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-
-  const count = await prisma.routineActivity.count({
-    where: { dayOfWeek: body.dayOfWeek },
-  });
-
-  const activity = await prisma.routineActivity.create({
-    data: {
-      title: body.title,
-      dayOfWeek: body.dayOfWeek,
-      order: count,
-    },
-    include: { completions: true },
-  });
-
-  return NextResponse.json(activity, { status: 201 });
+  return proxy(await apiFetch("/routine", { method: "POST", body: await req.text() }));
 }

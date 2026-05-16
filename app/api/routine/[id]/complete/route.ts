@@ -1,18 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest } from "next/server";
+import { apiFetch, proxy } from "@/lib/api";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const body = await req.json();
-
-  const completion = await prisma.activityCompletion.upsert({
-    where: { activityId_date: { activityId: id, date: new Date(body.date) } },
-    update: { done: body.done },
-    create: { activityId: id, date: new Date(body.date), done: body.done },
-  });
-
-  return NextResponse.json(completion);
+  return proxy(await apiFetch(`/routine/${id}/complete`, { method: "POST", body: await req.text() }));
 }

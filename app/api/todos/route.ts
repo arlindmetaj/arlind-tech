@@ -1,16 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest } from "next/server";
+import { apiFetch, proxy } from "@/lib/api";
 
 export async function GET() {
-  const todos = await prisma.todo.findMany({ orderBy: [{ order: "asc" }, { createdAt: "asc" }] });
-  return NextResponse.json(todos);
+  return proxy(await apiFetch("/todos"));
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const count = await prisma.todo.count();
-  const todo = await prisma.todo.create({
-    data: { title: body.title, order: count },
-  });
-  return NextResponse.json(todo, { status: 201 });
+  return proxy(await apiFetch("/todos", { method: "POST", body: await req.text() }));
 }

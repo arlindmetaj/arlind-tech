@@ -1,25 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest } from "next/server";
+import { apiFetch, proxy } from "@/lib/api";
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const date = searchParams.get("date");
-
-  const notes = await prisma.note.findMany({
-    where: date ? { date: new Date(date) } : undefined,
-    orderBy: { createdAt: "asc" },
-  });
-
-  return NextResponse.json(notes);
+  const date = new URL(req.url).searchParams.get("date");
+  return proxy(await apiFetch(`/notes${date ? `?date=${date}` : ""}`));
 }
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const note = await prisma.note.create({
-    data: {
-      content: body.content,
-      date: new Date(body.date),
-    },
-  });
-  return NextResponse.json(note, { status: 201 });
+  return proxy(await apiFetch("/notes", { method: "POST", body: await req.text() }));
 }
