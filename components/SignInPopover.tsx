@@ -7,7 +7,7 @@ export default function SignInPopover() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const show = searchParams.has("signin");
-  const next = searchParams.get("next") || "/w/week";
+  const next = searchParams.get("next") || "/w";
 
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
