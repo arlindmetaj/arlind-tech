@@ -54,6 +54,14 @@ function GoalCard({
           </span>
         )}
         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => onUpdate(goal.id, { category: goal.category === "PROFESSIONAL" ? "PERSONAL" : "PROFESSIONAL" })}
+            className="text-xs px-2 py-0.5 rounded-full"
+            style={{ background: "var(--line)", color: "var(--dim)" }}
+            title="Move to other category"
+          >
+            → {goal.category === "PROFESSIONAL" ? "Personal" : "Professional"}
+          </button>
           <button onClick={() => setEditing(true)} className="text-xs" style={{ color: "var(--dim)" }} title="Edit">✎</button>
           <button onClick={() => onRemove(goal.id)} className="text-xs hover:text-red-400" style={{ color: "var(--dim)" }} title="Delete">✕</button>
         </div>
