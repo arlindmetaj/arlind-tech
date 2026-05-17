@@ -116,9 +116,7 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
           Dashboard
         </p>
         {privateNav.map((item) => {
-          const active =
-            pathname === item.href ||
-            (item.href === "/w/week" && pathname === "/w");
+          const active = pathname === item.href;
           return (
             <button
               key={item.href}
