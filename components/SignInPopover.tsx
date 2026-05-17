@@ -46,7 +46,7 @@ export default function SignInPopover() {
         body: JSON.stringify({ password }),
       });
       if (res.ok) {
-        router.push(next);
+        window.location.href = next;
       } else {
         setError("Wrong password.");
         setPassword("");
