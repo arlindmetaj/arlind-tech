@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import ErrorState from "@/components/ErrorState";
 import { format, parseISO } from "date-fns";
 
 interface Note {
@@ -29,12 +30,15 @@ export default function JournalPage() {
 
   async function load() {
     setLoading(true);
+    setError(false);
     try {
       const data = await fetch("/api/notes").then((r) => r.json());
       const sorted = (Array.isArray(data) ? data : []).sort(
         (a: Note, b: Note) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
       setNotes(sorted);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -115,6 +119,7 @@ export default function JournalPage() {
 
       {/* Entries */}
       {loading && <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>Loading…</p>}
+      {error && <ErrorState onRetry={load} />}
 
       {!loading && notes.length === 0 && (
         <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>No entries yet.</p>

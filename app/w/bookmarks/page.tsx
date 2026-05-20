@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import ErrorState from "@/components/ErrorState";
 import { format } from "date-fns";
 
 interface Bookmark {
@@ -14,6 +15,7 @@ interface Bookmark {
 export default function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [urlInput, setUrlInput] = useState("");
   const [titleInput, setTitleInput] = useState("");
   const [tagInput, setTagInput] = useState("");
@@ -21,9 +23,12 @@ export default function BookmarksPage() {
 
   async function load() {
     setLoading(true);
+    setError(false);
     try {
       const data = await fetch("/api/bookmarks").then((r) => r.json());
       setBookmarks(Array.isArray(data) ? data : []);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -126,6 +131,7 @@ export default function BookmarksPage() {
       )}
 
       {loading && <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>Loading…</p>}
+      {error && <ErrorState onRetry={load} />}
 
       {!loading && filtered.length === 0 && (
         <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>No bookmarks yet.</p>

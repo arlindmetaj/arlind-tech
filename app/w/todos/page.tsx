@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import ErrorState from "@/components/ErrorState";
 
 interface Todo {
   id: string;
@@ -13,12 +14,16 @@ export default function TodosPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   async function load() {
     setLoading(true);
+    setError(false);
     try {
       const data = await fetch("/api/todos").then((r) => r.json());
       setTodos(Array.isArray(data) ? data : []);
+    } catch {
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -80,6 +85,7 @@ export default function TodosPage() {
       </div>
 
       {loading && <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>Loading…</p>}
+      {error && <ErrorState onRetry={load} />}
 
       {/* Open todos */}
       {!loading && (
