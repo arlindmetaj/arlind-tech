@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ErrorState from "@/components/ErrorState";
 
 interface Todo {
@@ -15,6 +15,7 @@ export default function TodosPage() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const dragId = useRef<string | null>(null);
 
   async function load() {
     setLoading(true);
@@ -56,6 +57,38 @@ export default function TodosPage() {
     load();
   }
 
+  function onDragStart(id: string) {
+    dragId.current = id;
+  }
+
+  function onDragOver(e: React.DragEvent, overId: string) {
+    e.preventDefault();
+    if (!dragId.current || dragId.current === overId) return;
+    const from = todos.findIndex((t) => t.id === dragId.current);
+    const to   = todos.findIndex((t) => t.id === overId);
+    if (from === -1 || to === -1) return;
+    const reordered = [...todos];
+    const [moved] = reordered.splice(from, 1);
+    reordered.splice(to, 0, moved);
+    setTodos(reordered);
+  }
+
+  async function onDrop() {
+    if (!dragId.current) return;
+    // Persist new order for all open todos
+    const open = todos.filter((t) => !t.done);
+    await Promise.all(
+      open.map((t, i) =>
+        fetch(`/api/todos/${t.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ order: i }),
+        })
+      )
+    );
+    dragId.current = null;
+  }
+
   const open = todos.filter((t) => !t.done);
   const done = todos.filter((t) => t.done);
 
@@ -64,7 +97,6 @@ export default function TodosPage() {
       <h1 className="font-caveat mb-1" style={{ fontSize: 48, color: "var(--ink)" }}>Todos</h1>
       <p className="text-sm mb-6" style={{ color: "var(--dim)" }}>{open.length} remaining</p>
 
-      {/* Add input */}
       <div className="flex gap-2 mb-8">
         <input
           type="text"
@@ -87,18 +119,30 @@ export default function TodosPage() {
       {loading && <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>Loading…</p>}
       {error && <ErrorState onRetry={load} />}
 
-      {/* Open todos */}
-      {!loading && (
+      {!loading && !error && (
         <div className="space-y-2">
           {open.length === 0 && done.length === 0 && (
             <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>No todos yet. Add one above.</p>
           )}
+
           {open.map((todo) => (
-            <TodoRow key={todo.id} todo={todo} onToggle={toggle} onDelete={remove} />
+            <TodoRow
+              key={todo.id}
+              todo={todo}
+              draggable
+              onDragStart={() => onDragStart(todo.id)}
+              onDragOver={(e) => onDragOver(e, todo.id)}
+              onDrop={onDrop}
+              onToggle={toggle}
+              onDelete={remove}
+            />
           ))}
+
           {done.length > 0 && (
             <>
-              <p className="text-xs pt-4 pb-1 font-semibold uppercase tracking-widest" style={{ color: "var(--dim)" }}>Done ({done.length})</p>
+              <p className="text-xs pt-4 pb-1 font-semibold uppercase tracking-widest" style={{ color: "var(--dim)" }}>
+                Done ({done.length})
+              </p>
               {done.map((todo) => (
                 <TodoRow key={todo.id} todo={todo} onToggle={toggle} onDelete={remove} />
               ))}
@@ -110,12 +154,45 @@ export default function TodosPage() {
   );
 }
 
-function TodoRow({ todo, onToggle, onDelete }: { todo: Todo; onToggle: (t: Todo) => void; onDelete: (id: string) => void }) {
+function TodoRow({
+  todo,
+  draggable,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onToggle,
+  onDelete,
+}: {
+  todo: Todo;
+  draggable?: boolean;
+  onDragStart?: () => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDrop?: () => void;
+  onToggle: (t: Todo) => void;
+  onDelete: (id: string) => void;
+}) {
+  const [dragging, setDragging] = useState(false);
+
   return (
     <div
+      draggable={draggable}
+      onDragStart={() => { setDragging(true); onDragStart?.(); }}
+      onDragEnd={() => setDragging(false)}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
       className="flex items-center gap-3 px-4 py-3 rounded-xl group transition-all"
-      style={{ border: "1px solid var(--line)", background: "var(--bg)" }}
+      style={{
+        border: "1px solid var(--line)",
+        background: "var(--bg)",
+        opacity: dragging ? 0.4 : 1,
+        cursor: draggable ? "grab" : "default",
+      }}
     >
+      {draggable && (
+        <span className="opacity-0 group-hover:opacity-40 transition-opacity text-xs select-none" style={{ color: "var(--dim)" }}>
+          ⠿
+        </span>
+      )}
       <button
         onClick={() => onToggle(todo)}
         className="w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all"
