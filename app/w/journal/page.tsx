@@ -22,6 +22,7 @@ function formatDisplay(dateStr: string) {
 export default function JournalPage() {
   const [notes, setNotes]     = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError]     = useState(false);
   const [content, setContent] = useState("");
   const [date, setDate]       = useState(toDateInput(new Date()));
   const [saving, setSaving]   = useState(false);
