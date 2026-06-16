@@ -349,21 +349,6 @@ export default function HomePage() {
 
           <div style={{ borderTop: "1px solid var(--line)" }} />
 
-          {/* ── Projects ───────────────────────────────── */}
-          <section id="projects">
-            <h2
-              className="font-caveat"
-              style={{ fontSize: 48, lineHeight: 1.1, color: "var(--ink)" }}
-            >
-              Projects
-            </h2>
-            <p className="mt-4 text-sm" style={{ color: "var(--dim)" }}>
-              Coming soon — working on a few things worth sharing.
-            </p>
-          </section>
-
-          <div style={{ borderTop: "1px solid var(--line)" }} />
-
           {/* ── Contact ────────────────────────────────── */}
           <section id="contact" className="space-y-6">
             <h2
