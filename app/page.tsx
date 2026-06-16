@@ -10,55 +10,69 @@ const experience = [
     period: "June 2024 – Present",
     location: "Tirana, Albania",
     bullets: [
-      "Develop and maintain cross-platform mobile applications using Flutter, delivering high-quality experiences across iOS and Android.",
-      "Build and contribute to frontend web applications using React and Next.js, focusing on reusable components, routing, and performance.",
-      "Collaborate closely with designers, backend engineers, and product stakeholders to deliver end-to-end features across mobile and web.",
-      "Integrate REST APIs, implement authentication flows, and support role-based access and permissions.",
-      "Emphasise clean architecture, maintainable codebases, and consistent user experience across platforms.",
+      "Worked closely with product and operations teams to study, analyse, and validate features before development begins, ensuring solutions are grounded in real business needs and user behaviour.",
+      "Contributed to product discovery and decision-making by evaluating use cases, surfacing edge cases early, and challenging assumptions to reduce rework downstream.",
+      "Translated validated product requirements into clean, maintainable technical implementations delivered across multiple platforms.",
+      "Collaborated with designers to review and refine interfaces, ensuring proposed solutions are both technically sound and aligned with user experience goals.",
+      "Acted as a bridge between engineering and non-engineering stakeholders, making technical trade-offs visible and helping the team move with clarity and confidence.",
+      "Drove feature quality end-to-end — from early scoping and design validation through to implementation, testing, and release.",
+    ],
+    projects: [
+      { name: "PayByPhone — Back Office Rewrite (SouthernCross)", description: "Part of the frontend team responsible for rewriting a legacy back office platform. Owned one of the most complex modules (Rates), working closely with Product, Operations, Commercial, and Engineering teams." },
+      { name: "PayByPhone — NorthStar", description: "Contributed to the migration of a native app to a Flutter module, involved from the early stages through to successful shipment." },
+      { name: "CVP", description: "Built a Flutter module integrated into PayByPhone for the UK market, enabling customers to pay for MOT, SMR services, and charge their electric vehicles." },
     ],
   },
   {
-    role: "Mobile Developer",
+    role: "Mobile Engineer",
     company: "Crispy Bacon",
-    period: "June 2022 – 2024",
+    period: "June 2022 – June 2024",
     location: "Tirana, Albania",
     bullets: [
-      "Developed and maintained mobile applications using Flutter and React Native, delivering cross-platform solutions for iOS and Android.",
-      "Collaborated with designers and backend engineers to implement user-facing features and business logic.",
-      "Integrated REST APIs and handled application state, navigation, and error handling.",
-      "Focused on code quality, performance, and maintainability in a fast-paced product environment.",
-      "Conducted code reviews and provided constructive feedback to enhance team performance.",
+      "Established Flutter and React Native development standards and code review practices across the engineering team, driving measurable improvements in consistency, quality, and reliability in production.",
+      "Defined state management patterns, navigation architecture, and error handling strategies adopted across the mobile codebase.",
+      "Collaborated with designers and backend engineers to implement user-facing features, owning delivery from technical scoping through to release.",
+      "Led technical planning discussions and shaped implementation approaches for key product features.",
+    ],
+    projects: [
+      { name: "MyCampy 3.0", description: "Flutter hybrid app to manage bikes and components, monitor wear, control EPS electronic gear shifting and track sessions in real time. 5/5 Play Store rating · Red Dot Winner 2024." },
+      { name: "Cup4You", description: "Flutter app for managing orders and recipes for La Cimbali fully automatic coffee machines. Enables drink customisation, recipe saving, and machine pairing via QR code." },
+      { name: "ConTe.it Loans", description: "Flutter app for a 100% digital personal loan platform, simplifying applications through digital signatures and Open Banking integration." },
+      { name: "Facile.it", description: "Led the full React Native rewrite of one of Italy's most recognised financial comparison platforms, rebuilding the mobile app from the ground up." },
+      { name: "LiuJo", description: "Rebuilt the mobile app for the established Italian fashion brand from scratch in React Native, delivering a modernised experience across iOS and Android." },
     ],
   },
   {
-    role: "Mobile Developer",
+    role: "Mobile Engineer",
     company: "Almotech",
     period: "July 2021 – June 2022",
     location: "Tirana, Albania",
     bullets: [
-      "Developed a booking mobile app system using Flutter — allowing users to book appointments with hairdressers, barbers, and more.",
-      "Worked closely with clients to specify project goals, build mockups, and design platform features.",
-      "Responsible for consuming REST services, parsing JSON responses, and integrating them into the application.",
-      "Experienced in maintaining, bug-fixing, and updating already built and released apps.",
+      "Built and shipped a production Flutter application from the ground up, owning the full development lifecycle from requirements gathering through to app store release.",
+      "Worked directly with clients to define project goals, translate business requirements into technical specifications, and align platform features with product vision.",
+      "Managed ongoing maintenance, bug fixing, and iterative feature development across live production applications.",
+      "Operated effectively in a small, fast-paced team, adapting quickly to shifting priorities and contributing across multiple areas of the product.",
     ],
+    projects: [],
   },
   {
-    role: "Mobile Developer",
+    role: "Software Developer",
     company: "Rubik Technologies",
     period: "June 2020 – February 2021",
     location: "Tirana, Albania",
     bullets: [
-      "Built a mobile e-commerce app with advanced functionalities including social features, product booking, and a token reward system.",
-      "Developed a booking system that holds a product until the client decides to buy, with merchant approval/denial flow.",
-      "Designed and implemented a unified system for merchants and clients to hold both roles simultaneously.",
+      "Contributed to the development of a mobile e-commerce platform, building out a product booking flow, social features, and a token-based rewards system for merchants and clients.",
+      "Designed and implemented a merchant approval system that controlled product availability based on purchase intent, reducing premature stock conflicts.",
+      "Built a unified dual-role account model, allowing users to seamlessly switch between merchant and client roles within the same session.",
     ],
+    projects: [],
   },
 ];
 
 const stack = {
-  Mobile: ["Flutter", "React Native", "Expo", "SwiftUI"],
-  Frontend: ["React", "Next.js"],
-  Languages: ["Dart", "Java", "JavaScript", "TypeScript"],
+  Mobile: ["Flutter", "React Native"],
+  Frontend: ["React", "Next.js", "TypeScript", "JavaScript"],
+  Architecture: ["Clean Architecture", "BLoC", "Riverpod", "MVVM"],
 };
 
 export default function HomePage() {
@@ -107,23 +121,18 @@ export default function HomePage() {
             <div className="flex flex-col gap-10 sm:flex-row sm:gap-12">
               <div className="flex-1 space-y-4 min-w-0">
                 <p style={{ color: "var(--ink)", lineHeight: 1.75 }}>
-                  I build software, write about ideas, and spend a lot of time
-                  tinkering with things.
+                  Software Engineer with experience designing and delivering
+                  high-quality digital products across multiple platforms. Known
+                  for combining strong engineering fundamentals with a sharp
+                  product sensibility — thinking beyond implementation to
+                  understand user needs, business goals, and long-term
+                  maintainability.
                 </p>
                 <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
-                  Over the past few years, I've worked across mobile and web,
-                  taking products from early wireframes to production. Somewhere
-                  along that process, my focus shifted. I'm still interested in
-                  how things are built, but more in why they're built the way
-                  they are — the decisions, trade-offs, and constraints behind
-                  them.
-                </p>
-                <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
-                  I care about simplicity. Not because minimalism is fashionable,
-                  but because complexity compounds. Every extra layer is something
-                  someone has to understand, maintain, and eventually remove. I
-                  try to build things that are clear, predictable, and easy to
-                  reason about — both in code and in product.
+                  Comfortable owning complex problems end-to-end, from early
+                  architecture decisions through to production. Thrives in
+                  collaborative environments where engineering, design, and
+                  product thinking intersect.
                 </p>
                 <p style={{ color: "var(--dim)", lineHeight: 1.75 }}>
                   Most of my time goes into reading, thinking, and trying to
@@ -215,7 +224,7 @@ export default function HomePage() {
                 Tools I use
               </h3>
               <div className="flex flex-wrap gap-2">
-                {["Claude", "Perplexity", "Cursor"].map((tool) => (
+                {["Claude Code", "GitHub Copilot", "Cursor", "Codex"].map((tool) => (
                   <span
                     key={tool}
                     className="px-2.5 py-1 rounded-lg text-sm"
@@ -284,6 +293,27 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
+
+                  {job.projects.length > 0 && (
+                    <div className="mt-5 space-y-2">
+                      <h4
+                        className="text-xs font-semibold uppercase tracking-widest"
+                        style={{ color: "var(--dim)" }}
+                      >
+                        Projects
+                      </h4>
+                      {job.projects.map((p, j) => (
+                        <div
+                          key={j}
+                          className="rounded-xl px-4 py-3"
+                          style={{ background: "var(--hi)", border: "1px solid var(--line)" }}
+                        >
+                          <p className="text-sm font-medium" style={{ color: "var(--ink)" }}>{p.name}</p>
+                          <p className="text-xs mt-1" style={{ color: "var(--dim)", lineHeight: 1.6 }}>{p.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
