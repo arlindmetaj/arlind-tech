@@ -172,26 +172,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* GitHub */}
-            <div>
-              <h2
-                className="text-xs font-semibold uppercase tracking-widest mb-4"
-                style={{ color: "var(--dim)" }}
-              >
-                GitHub
-              </h2>
-              <GitHubGraph username="arlindmetaj" />
-              <p className="mt-2 text-xs" style={{ color: "var(--dim)" }}>
-                <a
-                  href="https://github.com/arlindmetaj"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-opacity hover:opacity-70"
-                >
-                  github.com/arlindmetaj
-                </a>
-              </p>
-            </div>
           </section>
 
           <div style={{ borderTop: "1px solid var(--line)" }} />
@@ -403,6 +383,29 @@ export default function HomePage() {
                 </span>
               </div>
             </div>
+          </section>
+
+          <div style={{ borderTop: "1px solid var(--line)" }} />
+
+          {/* ── GitHub ─────────────────────────────────── */}
+          <section id="github" className="space-y-4">
+            <h2
+              className="font-caveat"
+              style={{ fontSize: 48, lineHeight: 1.1, color: "var(--ink)" }}
+            >
+              GitHub
+            </h2>
+            <GitHubGraph username="arlindmetaj" />
+            <p className="text-xs" style={{ color: "var(--dim)" }}>
+              <a
+                href="https://github.com/arlindmetaj"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-opacity hover:opacity-70"
+              >
+                github.com/arlindmetaj
+              </a>
+            </p>
           </section>
 
         </div>
