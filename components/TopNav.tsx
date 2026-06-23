@@ -10,7 +10,6 @@ interface TopNavProps {
 }
 
 const sections = [
-  { href: "#ai", label: "AI" },
   { href: "#work", label: "Work" },
   { href: "#contact", label: "Contact" },
   { href: "#github", label: "GitHub" },
