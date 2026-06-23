@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #f8fafc;
-  --ink: #1c1b18;
-  --dim: #6a675f;
-  --line: #e2e0d8;
+  --bg: #fafaf9;
+  --ink: #1c1917;
+  --dim: #79716b;
+  --line: #e7e5e4;
   --accent: #c2410c;
-  --hi: #f1ecd6;
+  --hi: #f5f5f4;
   --on-accent: #ffffff;
 }
 
 .dark {
-  --bg: #14130f;
-  --ink: #ece9df;
-  --dim: #8a8780;
-  --line: #2a2824;
-  --accent: #ea6c3a;
-  --hi: #1e1c17;
+  --bg: #1a1817;
+  --ink: #f5f4f1;
+  --dim: #a8a29e;
+  --line: #2a2725;
+  --accent: #f97316;
+  --hi: #262321;
   --on-accent: #ffffff;
 }
 
@@ -25,6 +25,9 @@ body {
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
   transition: background 0.2s, color 0.2s;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .font-caveat {

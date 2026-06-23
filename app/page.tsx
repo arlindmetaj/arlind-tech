@@ -75,22 +75,6 @@ const stack = {
   Architecture: ["Clean Architecture", "BLoC", "Riverpod", "MVVM"],
 };
 
-const stats = [
-  { value: "6+", label: "Years building" },
-  { value: "10+", label: "Products shipped" },
-  { value: "4", label: "Companies" },
-  { value: "2024", label: "Red Dot Award" },
-];
-
-const brands = [
-  "PayByPhone",
-  "Facile.it",
-  "ConTe.it",
-  "LiuJo",
-  "La Cimbali",
-  "MyCampy",
-];
-
 export default function HomePage() {
   return (
     <>
@@ -112,15 +96,7 @@ export default function HomePage() {
                 >
                   Arlind Metaj
                 </h1>
-                <p
-                  className="mt-3 text-xl sm:text-2xl font-medium"
-                  style={{ color: "var(--ink)", lineHeight: 1.35 }}
-                >
-                  Software Engineer who cares as much about the{" "}
-                  <span style={{ color: "var(--accent)" }}>product</span> as the
-                  code.
-                </p>
-                <p className="mt-2 text-base" style={{ color: "var(--dim)" }}>
+                <p className="mt-3 text-base" style={{ color: "var(--dim)" }}>
                   engineer · writer · maker of things — based in Tirana, Albania
                 </p>
               </div>
@@ -139,48 +115,6 @@ export default function HomePage() {
                 >
                   View work
                 </a>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {stats.map((s) => (
-                <div key={s.label} className="stat-tile rounded-2xl px-4 py-4">
-                  <p
-                    className="text-2xl sm:text-3xl font-semibold leading-none"
-                    style={{ color: "var(--accent)" }}
-                  >
-                    {s.value}
-                  </p>
-                  <p className="text-xs mt-2" style={{ color: "var(--dim)" }}>
-                    {s.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Brands */}
-            <div>
-              <p
-                className="text-xs font-semibold uppercase tracking-widest mb-3"
-                style={{ color: "var(--dim)" }}
-              >
-                Products I&apos;ve helped build
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {brands.map((brand) => (
-                  <span
-                    key={brand}
-                    className="px-3 py-1 rounded-full text-sm"
-                    style={{
-                      background: "var(--hi)",
-                      color: "var(--ink)",
-                      border: "1px solid var(--line)",
-                    }}
-                  >
-                    {brand}
-                  </span>
-                ))}
               </div>
             </div>
 
