@@ -101,17 +101,6 @@ export default function HomePage() {
           <section id="about" className="space-y-10">
             {/* Hero */}
             <div className="space-y-6">
-              {/* Availability */}
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full"
-                style={{ background: "var(--hi)", border: "1px solid var(--line)" }}
-              >
-                <span className="dot-pulse" />
-                <span className="text-xs" style={{ color: "var(--dim)" }}>
-                  Open to new opportunities
-                </span>
-              </div>
-
               <div>
                 <h1
                   className="font-caveat"
