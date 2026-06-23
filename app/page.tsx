@@ -75,6 +75,22 @@ const stack = {
   Architecture: ["Clean Architecture", "BLoC", "Riverpod", "MVVM"],
 };
 
+const stats = [
+  { value: "6+", label: "Years building" },
+  { value: "10+", label: "Products shipped" },
+  { value: "4", label: "Companies" },
+  { value: "2024", label: "Red Dot Award" },
+];
+
+const brands = [
+  "PayByPhone",
+  "Facile.it",
+  "ConTe.it",
+  "LiuJo",
+  "La Cimbali",
+  "MyCampy",
+];
+
 export default function HomePage() {
   return (
     <>
@@ -84,37 +100,99 @@ export default function HomePage() {
           {/* ── About ──────────────────────────────────── */}
           <section id="about" className="space-y-10">
             {/* Hero */}
-            <div>
-              <h1
-                className="font-caveat"
-                style={{ fontSize: 72, lineHeight: 1.05, color: "var(--ink)" }}
+            <div className="space-y-6">
+              {/* Availability */}
+              <div
+                className="inline-flex items-center gap-2 px-3 py-1 rounded-full"
+                style={{ background: "var(--hi)", border: "1px solid var(--line)" }}
               >
-                Arlind Metaj
-              </h1>
-              <p className="mt-2 text-lg" style={{ color: "var(--dim)" }}>
-                engineer · writer · maker of things
-              </p>
-            </div>
+                <span className="dot-pulse" />
+                <span className="text-xs" style={{ color: "var(--dim)" }}>
+                  Open to new opportunities
+                </span>
+              </div>
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {[
-                "currently @ Ritech International AG",
-                "based in Tirana, Albania",
-                "open to chats",
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 rounded-full text-sm"
+              <div>
+                <h1
+                  className="font-caveat"
                   style={{
-                    background: "var(--hi)",
-                    color: "var(--dim)",
-                    border: "1px solid var(--line)",
+                    fontSize: "clamp(3rem, 9vw, 5rem)",
+                    lineHeight: 1.02,
+                    color: "var(--ink)",
                   }}
                 >
-                  {tag}
-                </span>
+                  Arlind Metaj
+                </h1>
+                <p
+                  className="mt-3 text-xl sm:text-2xl font-medium"
+                  style={{ color: "var(--ink)", lineHeight: 1.35 }}
+                >
+                  Software Engineer who cares as much about the{" "}
+                  <span style={{ color: "var(--accent)" }}>product</span> as the
+                  code.
+                </p>
+                <p className="mt-2 text-base" style={{ color: "var(--dim)" }}>
+                  engineer · writer · maker of things — based in Tirana, Albania
+                </p>
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="#contact"
+                  className="cta-primary px-5 py-2.5 rounded-xl text-sm font-medium"
+                >
+                  Get in touch
+                </a>
+                <a
+                  href="#work"
+                  className="cta-secondary px-5 py-2.5 rounded-xl text-sm font-medium"
+                >
+                  View work
+                </a>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {stats.map((s) => (
+                <div key={s.label} className="stat-tile rounded-2xl px-4 py-4">
+                  <p
+                    className="text-2xl sm:text-3xl font-semibold leading-none"
+                    style={{ color: "var(--accent)" }}
+                  >
+                    {s.value}
+                  </p>
+                  <p className="text-xs mt-2" style={{ color: "var(--dim)" }}>
+                    {s.label}
+                  </p>
+                </div>
               ))}
+            </div>
+
+            {/* Brands */}
+            <div>
+              <p
+                className="text-xs font-semibold uppercase tracking-widest mb-3"
+                style={{ color: "var(--dim)" }}
+              >
+                Products I&apos;ve helped build
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {brands.map((brand) => (
+                  <span
+                    key={brand}
+                    className="px-3 py-1 rounded-full text-sm"
+                    style={{
+                      background: "var(--hi)",
+                      color: "var(--ink)",
+                      border: "1px solid var(--line)",
+                    }}
+                  >
+                    {brand}
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* Bio + Stack */}
