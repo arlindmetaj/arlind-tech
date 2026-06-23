@@ -29,6 +29,37 @@ body {
   font-family: var(--font-caveat), cursive;
 }
 
+/* Dashboard card: subtle, professional hover instead of dimming */
+.dash-card {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dash-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px -8px rgba(0, 0, 0, 0.18);
+}
+
+/* Compact icon button for row actions */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  color: var(--dim);
+  transition: color 0.12s ease, background 0.12s ease;
+}
+.icon-btn:hover {
+  background: var(--hi);
+  color: var(--ink);
+}
+.icon-btn.danger:hover {
+  color: #dc2626;
+}
+
 * {
   box-sizing: border-box;
 }

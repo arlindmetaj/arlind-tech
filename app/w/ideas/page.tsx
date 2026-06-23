@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { Trash2 } from "lucide-react";
 import ErrorState from "@/components/ErrorState";
 import { format } from "date-fns";
 
@@ -133,10 +134,10 @@ export default function IdeasPage() {
             </div>
             <button
               onClick={() => remove(idea.id)}
-              className="text-xs opacity-0 group-hover:opacity-100 transition-opacity self-start hover:text-red-400"
-              style={{ color: "var(--dim)" }}
+              className="icon-btn danger opacity-0 group-hover:opacity-100 transition-opacity self-start"
+              title="Delete"
             >
-              ✕
+              <Trash2 size={13} />
             </button>
           </div>
         ))}

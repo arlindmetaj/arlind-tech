@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Pencil, Trash2 } from "lucide-react";
 import ErrorState from "@/components/ErrorState";
 import { format, parseISO } from "date-fns";
 
@@ -172,17 +173,17 @@ export default function JournalPage() {
                   <>
                     <button
                       onClick={() => { setEditId(note.id); setEditContent(note.content); }}
-                      className="text-xs"
-                      style={{ color: "var(--dim)" }}
+                      className="icon-btn"
+                      title="Edit"
                     >
-                      ✎ Edit
+                      <Pencil size={13} />
                     </button>
                     <button
                       onClick={() => remove(note.id)}
-                      className="text-xs hover:text-red-400"
-                      style={{ color: "var(--dim)" }}
+                      className="icon-btn danger"
+                      title="Delete"
                     >
-                      ✕ Delete
+                      <Trash2 size={13} />
                     </button>
                   </>
                 )}
