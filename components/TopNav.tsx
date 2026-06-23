@@ -12,8 +12,8 @@ interface TopNavProps {
 const sections = [
   { href: "#ai", label: "AI" },
   { href: "#work", label: "Work" },
-  { href: "#projects", label: "Projects" },
   { href: "#contact", label: "Contact" },
+  { href: "#github", label: "GitHub" },
 ];
 
 export default function TopNav({ loggedIn }: TopNavProps) {
