@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Download } from "lucide-react";
 import PublicShell from "@/components/PublicShell";
 import GitHubGraph from "@/components/GitHubGraph";
 import SignInPopover from "@/components/SignInPopover";
@@ -118,6 +119,14 @@ export default function HomePage() {
                     className="cta-secondary px-5 py-2.5 rounded-xl text-sm font-medium"
                   >
                     View work
+                  </a>
+                  <a
+                    href="/Arlind_Metaj_CV.pdf"
+                    download
+                    className="cta-secondary px-5 py-2.5 rounded-xl text-sm font-medium inline-flex items-center gap-2"
+                  >
+                    <Download size={15} />
+                    Download CV
                   </a>
                 </div>
               </div>
@@ -399,6 +408,23 @@ export default function HomePage() {
                 <span className="text-sm" style={{ color: "var(--ink)" }}>
                   Tirana, Albania
                 </span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span
+                  className="text-xs w-16 shrink-0"
+                  style={{ color: "var(--dim)" }}
+                >
+                  Résumé
+                </span>
+                <a
+                  href="/Arlind_Metaj_CV.pdf"
+                  download
+                  className="text-sm font-medium inline-flex items-center gap-1.5 transition-opacity hover:opacity-70"
+                  style={{ color: "var(--accent)" }}
+                >
+                  <Download size={14} />
+                  Download CV (PDF)
+                </a>
               </div>
             </div>
           </section>
