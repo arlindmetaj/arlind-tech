@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, parseISO, isToday } from "date-fns";
-import { Target, CheckSquare, NotebookPen, ArrowUpRight } from "lucide-react";
+import { Target, CheckSquare, NotebookPen, StickyNote, Pin, ArrowUpRight } from "lucide-react";
 
 interface Goal {
   id: string;
@@ -24,11 +24,20 @@ interface Note {
   date: string;
 }
 
+interface Memo {
+  id: string;
+  title: string;
+  content: string;
+  pinned: boolean;
+  updatedAt: string;
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [memos, setMemos] = useState<Memo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,10 +45,12 @@ export default function Dashboard() {
       fetch("/api/goals").then((r) => r.json()),
       fetch("/api/todos").then((r) => r.json()),
       fetch("/api/notes").then((r) => r.json()),
-    ]).then(([g, t, n]) => {
+      fetch("/api/memos").then((r) => r.json()),
+    ]).then(([g, t, n, m]) => {
       setGoals(Array.isArray(g) ? g : []);
       setTodos(Array.isArray(t) ? t : []);
       setNotes(Array.isArray(n) ? n : []);
+      setMemos(Array.isArray(m) ? m : []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
@@ -55,6 +66,9 @@ export default function Dashboard() {
   const lastNote = [...notes].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )[0];
+
+  // API already returns memos sorted: pinned first, then most-recently updated.
+  const topMemo = memos[0];
 
   const hour = new Date().getHours();
   const greeting =
@@ -92,10 +106,11 @@ export default function Dashboard() {
         ) : (
           <>
             {/* KPI strip */}
-            <div className="grid grid-cols-3 gap-3 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               <Kpi label="Active goals" value={activeGoals.length} />
               <Kpi label="Todos left" value={pendingTodos.length} />
               <Kpi label="Journal entries" value={notes.length} />
+              <Kpi label="Notes" value={memos.length} />
             </div>
 
             {/* Cards */}
@@ -195,6 +210,38 @@ export default function Dashboard() {
                       }}
                     >
                       {lastNote.content}
+                    </p>
+                  </div>
+                )}
+              </button>
+
+              {/* Notes */}
+              <button
+                className="dash-card rounded-2xl p-5 text-left sm:col-span-2"
+                onClick={() => router.push("/w/notes")}
+              >
+                <CardHead Icon={StickyNote} title="Notes" />
+                {!topMemo ? (
+                  <p className="text-sm" style={{ color: "var(--dim)" }}>No notes yet.</p>
+                ) : (
+                  <div>
+                    {topMemo.title && (
+                      <p className="text-sm font-semibold mb-1 flex items-center gap-1.5" style={{ color: "var(--ink)" }}>
+                        {topMemo.pinned && <Pin size={12} fill="var(--accent)" style={{ color: "var(--accent)" }} />}
+                        {topMemo.title}
+                      </p>
+                    )}
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{
+                        color: "var(--dim)",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {topMemo.content || "—"}
                     </p>
                   </div>
                 )}
