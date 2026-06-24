@@ -135,52 +135,30 @@ body {
 }
 .hero-aurora {
   position: absolute;
-  top: -140px;
-  left: -90px;
-  width: 460px;
-  height: 460px;
-  max-width: 90vw;
+  top: -110px;
+  left: -70px;
+  width: 380px;
+  height: 380px;
+  max-width: 85vw;
   border-radius: 9999px;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--accent) 26%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 18%, transparent) 0%,
     transparent 70%
   );
-  filter: blur(44px);
+  filter: blur(46px);
   pointer-events: none;
   z-index: 0;
   animation: auroraDrift 16s ease-in-out infinite;
 }
 
-/* Accent shimmer sweeping across the name */
-@keyframes nameShimmer {
-  to { background-position: -200% center; }
-}
 .hero-name {
-  background: linear-gradient(
-    110deg,
-    var(--ink) 0%,
-    var(--ink) 42%,
-    var(--accent) 50%,
-    var(--ink) 58%,
-    var(--ink) 100%
-  );
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: nameShimmer 7s linear infinite;
+  color: var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-reveal { opacity: 1; animation: none; }
   .hero-aurora { animation: none; }
-  .hero-name {
-    animation: none;
-    -webkit-text-fill-color: var(--ink);
-    color: var(--ink);
-  }
 }
 
 * {
