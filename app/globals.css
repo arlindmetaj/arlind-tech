@@ -127,38 +127,8 @@ body {
 .hero-d2 { animation-delay: 0.22s; }
 .hero-d3 { animation-delay: 0.36s; }
 
-/* Soft drifting accent glow behind the name */
-@keyframes auroraDrift {
-  0%   { transform: translate(-8%, -6%) scale(1); }
-  50%  { transform: translate(10%, 6%) scale(1.18); }
-  100% { transform: translate(-8%, -6%) scale(1); }
-}
-.hero-aurora {
-  position: absolute;
-  top: -110px;
-  left: -70px;
-  width: 380px;
-  height: 380px;
-  max-width: 85vw;
-  border-radius: 9999px;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) 18%, transparent) 0%,
-    transparent 70%
-  );
-  filter: blur(46px);
-  pointer-events: none;
-  z-index: 0;
-  animation: auroraDrift 16s ease-in-out infinite;
-}
-
-.hero-name {
-  color: var(--ink);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hero-reveal { opacity: 1; animation: none; }
-  .hero-aurora { animation: none; }
 }
 
 * {

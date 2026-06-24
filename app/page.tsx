@@ -85,14 +85,14 @@ export default function HomePage() {
           <section id="about" className="space-y-10">
             {/* Hero */}
             <div className="relative">
-              <span className="hero-aurora" aria-hidden="true" />
               <div className="relative space-y-6" style={{ zIndex: 1 }}>
                 <div>
                   <h1
-                    className="font-caveat hero-name hero-reveal hero-d1"
+                    className="font-caveat hero-reveal hero-d1"
                     style={{
                       fontSize: "clamp(3rem, 9vw, 5rem)",
                       lineHeight: 1.02,
+                      color: "var(--ink)",
                     }}
                   >
                     Arlind Metaj
