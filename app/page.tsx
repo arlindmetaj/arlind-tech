@@ -84,37 +84,42 @@ export default function HomePage() {
           {/* ── About ──────────────────────────────────── */}
           <section id="about" className="space-y-10">
             {/* Hero */}
-            <div className="space-y-6">
-              <div>
-                <h1
-                  className="font-caveat"
-                  style={{
-                    fontSize: "clamp(3rem, 9vw, 5rem)",
-                    lineHeight: 1.02,
-                    color: "var(--ink)",
-                  }}
-                >
-                  Arlind Metaj
-                </h1>
-                <p className="mt-3 text-base" style={{ color: "var(--dim)" }}>
-                  engineer · writer · maker of things — based in Tirana, Albania
-                </p>
-              </div>
+            <div className="relative">
+              <span className="hero-aurora" aria-hidden="true" />
+              <div className="relative space-y-6" style={{ zIndex: 1 }}>
+                <div>
+                  <h1
+                    className="font-caveat hero-name hero-reveal hero-d1"
+                    style={{
+                      fontSize: "clamp(3rem, 9vw, 5rem)",
+                      lineHeight: 1.02,
+                    }}
+                  >
+                    Arlind Metaj
+                  </h1>
+                  <p
+                    className="hero-reveal hero-d2 mt-3 text-base"
+                    style={{ color: "var(--dim)" }}
+                  >
+                    engineer · writer · maker of things — based in Tirana, Albania
+                  </p>
+                </div>
 
-              {/* CTAs */}
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href="#contact"
-                  className="cta-primary px-5 py-2.5 rounded-xl text-sm font-medium"
-                >
-                  Get in touch
-                </a>
-                <a
-                  href="#work"
-                  className="cta-secondary px-5 py-2.5 rounded-xl text-sm font-medium"
-                >
-                  View work
-                </a>
+                {/* CTAs */}
+                <div className="hero-reveal hero-d3 flex flex-wrap gap-3">
+                  <a
+                    href="#contact"
+                    className="cta-primary px-5 py-2.5 rounded-xl text-sm font-medium"
+                  >
+                    Get in touch
+                  </a>
+                  <a
+                    href="#work"
+                    className="cta-secondary px-5 py-2.5 rounded-xl text-sm font-medium"
+                  >
+                    View work
+                  </a>
+                </div>
               </div>
             </div>
 
