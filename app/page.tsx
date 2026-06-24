@@ -234,23 +234,35 @@ export default function HomePage() {
                   </ul>
 
                   {job.projects.length > 0 && (
-                    <div className="mt-5 space-y-2">
+                    <div className="mt-6">
                       <h4
-                        className="text-xs font-semibold uppercase tracking-widest"
+                        className="text-xs font-semibold uppercase tracking-widest mb-3"
                         style={{ color: "var(--dim)" }}
                       >
-                        Projects
+                        Selected projects
                       </h4>
-                      {job.projects.map((p, j) => (
-                        <div
-                          key={j}
-                          className="rounded-xl px-4 py-3"
-                          style={{ background: "var(--hi)", border: "1px solid var(--line)" }}
-                        >
-                          <p className="text-sm font-medium" style={{ color: "var(--ink)" }}>{p.name}</p>
-                          <p className="text-xs mt-1" style={{ color: "var(--dim)", lineHeight: 1.6 }}>{p.description}</p>
-                        </div>
-                      ))}
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {job.projects.map((p, j) => (
+                          <div key={j} className="proj-card rounded-xl p-4">
+                            <p
+                              className="text-sm font-medium flex items-baseline gap-2"
+                              style={{ color: "var(--ink)" }}
+                            >
+                              <span
+                                className="inline-block w-1.5 h-1.5 rounded-full shrink-0 translate-y-[-1px]"
+                                style={{ background: "var(--accent)" }}
+                              />
+                              <span className="min-w-0">{p.name}</span>
+                            </p>
+                            <p
+                              className="text-xs mt-2"
+                              style={{ color: "var(--dim)", lineHeight: 1.65 }}
+                            >
+                              {p.description}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>

@@ -101,6 +101,18 @@ body {
   transform: translateY(-1px);
 }
 
+/* Public work: project card */
+.proj-card {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+.proj-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px -10px rgba(0, 0, 0, 0.2);
+}
+
 /* Stat tile */
 .stat-tile {
   border: 1px solid var(--line);
