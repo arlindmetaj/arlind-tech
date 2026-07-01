@@ -85,6 +85,16 @@ body {
   transform: translateY(-1px);
 }
 
+/* Dashboard: idea card */
+.idea-card {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  transition: border-color 0.15s ease;
+}
+.idea-card:hover {
+  border-color: var(--accent);
+}
+
 /* Public work: project card */
 .proj-card {
   border: 1px solid var(--line);
@@ -95,17 +105,6 @@ body {
   border-color: var(--accent);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px -10px rgba(0, 0, 0, 0.2);
-}
-
-/* Stat tile */
-.stat-tile {
-  border: 1px solid var(--line);
-  background: var(--hi);
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-.stat-tile:hover {
-  border-color: var(--accent);
-  transform: translateY(-1px);
 }
 
 /* ── Hero: entrance + ambient motion ───────────────────── */

@@ -112,11 +112,15 @@ export default function IdeasPage() {
         {ideas.map((idea) => (
           <div
             key={idea.id}
-            className="p-4 rounded-xl group flex gap-4"
-            style={{ border: "1px solid var(--line)", background: "var(--bg)" }}
+            className="idea-card p-4 rounded-xl group flex gap-4"
           >
             <div className="flex-1 min-w-0">
-              <p className="text-sm" style={{ color: "var(--ink)", lineHeight: 1.6 }}>{idea.content}</p>
+              <p
+                className="text-sm whitespace-pre-wrap break-words"
+                style={{ color: "var(--ink)", lineHeight: 1.6 }}
+              >
+                {idea.content}
+              </p>
               <div className="flex items-center gap-2 mt-2 flex-wrap">
                 <span className="text-xs" style={{ color: "var(--dim)" }}>
                   {format(new Date(idea.createdAt), "MMM d, yyyy")}
