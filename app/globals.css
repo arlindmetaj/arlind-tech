@@ -34,6 +34,14 @@ body {
   font-family: var(--font-caveat), cursive;
 }
 
+/* Native date input: match calendar icon + picker popup to the theme */
+input[type="date"] {
+  color-scheme: light;
+}
+.dark input[type="date"] {
+  color-scheme: dark;
+}
+
 /* Dashboard card: subtle, professional hover instead of dimming */
 .dash-card {
   border: 1px solid var(--line);
