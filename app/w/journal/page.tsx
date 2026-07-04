@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import ErrorState from "@/components/ErrorState";
 import { format, parseISO } from "date-fns";
@@ -20,6 +20,12 @@ function formatDisplay(dateStr: string) {
   return format(parseISO(dateStr), "EEEE, MMMM d, yyyy");
 }
 
+function autoGrow(el: HTMLTextAreaElement | null) {
+  if (!el) return;
+  el.style.height = "auto";
+  el.style.height = `${el.scrollHeight}px`;
+}
+
 export default function JournalPage() {
   const [notes, setNotes]     = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,6 +35,9 @@ export default function JournalPage() {
   const [saving, setSaving]   = useState(false);
   const [editId, setEditId]   = useState<string | null>(null);
   const [editContent, setEditContent] = useState("");
+  const composeRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => { autoGrow(composeRef.current); }, [content]);
 
   async function load() {
     setLoading(true);
@@ -97,12 +106,14 @@ export default function JournalPage() {
           />
         </div>
         <textarea
+          ref={composeRef}
           placeholder="Write something…"
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          onInput={(e) => autoGrow(e.currentTarget)}
           rows={4}
-          className="w-full text-sm outline-none resize-none"
-          style={{ background: "transparent", color: "var(--ink)" }}
+          className="w-full text-sm outline-none resize-none overflow-hidden"
+          style={{ background: "transparent", color: "var(--ink)", minHeight: "6rem" }}
           onKeyDown={(e) => {
             if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) save();
           }}
@@ -136,12 +147,14 @@ export default function JournalPage() {
             <div className="rounded-2xl p-5" style={{ border: "1px solid var(--line)", background: "var(--bg)" }}>
               {editId === note.id ? (
                 <textarea
+                  ref={autoGrow}
                   autoFocus
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
+                  onInput={(e) => autoGrow(e.currentTarget)}
                   rows={4}
-                  className="w-full text-sm outline-none resize-none"
-                  style={{ background: "transparent", color: "var(--ink)" }}
+                  className="w-full text-sm outline-none resize-none overflow-hidden"
+                  style={{ background: "transparent", color: "var(--ink)", minHeight: "6rem" }}
                   onKeyDown={(e) => {
                     if (e.key === "Escape") setEditId(null);
                     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveEdit(note.id);
