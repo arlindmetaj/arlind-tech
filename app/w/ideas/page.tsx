@@ -128,7 +128,8 @@ export default function IdeasPage() {
                 {idea.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-2 py-0.5 rounded-full"
+                    title={tag}
+                    className="text-xs px-2 py-0.5 rounded-full max-w-[10rem] truncate"
                     style={{ background: "var(--hi)", color: "var(--dim)", border: "1px solid var(--line)" }}
                   >
                     {tag}
