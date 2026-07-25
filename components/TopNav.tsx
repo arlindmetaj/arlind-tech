@@ -19,6 +19,7 @@ export default function TopNav({ loggedIn }: TopNavProps) {
   const router = useRouter();
   const [dark, setDark] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const visibleSections = loggedIn ? sections : sections.filter((s) => s.href !== "#github");
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");
@@ -73,7 +74,7 @@ export default function TopNav({ loggedIn }: TopNavProps) {
 
         {/* Desktop right side */}
         <div className="hidden sm:flex items-center gap-1">
-          {sections.map((s) => (
+          {visibleSections.map((s) => (
             <a
               key={s.href}
               href={s.href}
@@ -145,7 +146,7 @@ export default function TopNav({ loggedIn }: TopNavProps) {
           className="sm:hidden px-4 pb-3 flex flex-col"
           style={{ borderTop: "1px solid var(--line)" }}
         >
-          {sections.map((s) => (
+          {visibleSections.map((s) => (
             <a
               key={s.href}
               href={s.href}

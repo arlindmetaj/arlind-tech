@@ -3,6 +3,7 @@ import { Download } from "lucide-react";
 import PublicShell from "@/components/PublicShell";
 import GitHubGraph from "@/components/GitHubGraph";
 import SignInPopover from "@/components/SignInPopover";
+import { getSessionFromCookies } from "@/lib/auth";
 
 const experience = [
   {
@@ -76,7 +77,9 @@ const stack = {
   Architecture: ["Clean Architecture", "BLoC", "Riverpod", "MVVM"],
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const loggedIn = await getSessionFromCookies();
+
   return (
     <>
       <PublicShell>
@@ -429,28 +432,32 @@ export default function HomePage() {
             </div>
           </section>
 
-          <div style={{ borderTop: "1px solid var(--line)" }} />
+          {loggedIn && (
+            <>
+              <div style={{ borderTop: "1px solid var(--line)" }} />
 
-          {/* ── GitHub ─────────────────────────────────── */}
-          <section id="github" className="space-y-4">
-            <h2
-              className="font-caveat"
-              style={{ fontSize: 48, lineHeight: 1.1, color: "var(--ink)" }}
-            >
-              GitHub
-            </h2>
-            <GitHubGraph username="arlindmetaj" />
-            <p className="text-xs" style={{ color: "var(--dim)" }}>
-              <a
-                href="https://github.com/arlindmetaj"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="transition-opacity hover:opacity-70"
-              >
-                github.com/arlindmetaj
-              </a>
-            </p>
-          </section>
+              {/* ── GitHub ─────────────────────────────────── */}
+              <section id="github" className="space-y-4">
+                <h2
+                  className="font-caveat"
+                  style={{ fontSize: 48, lineHeight: 1.1, color: "var(--ink)" }}
+                >
+                  GitHub
+                </h2>
+                <GitHubGraph username="arlindmetaj" />
+                <p className="text-xs" style={{ color: "var(--dim)" }}>
+                  <a
+                    href="https://github.com/arlindmetaj"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-opacity hover:opacity-70"
+                  >
+                    github.com/arlindmetaj
+                  </a>
+                </p>
+              </section>
+            </>
+          )}
 
         </div>
       </PublicShell>
