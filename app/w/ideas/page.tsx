@@ -12,13 +12,34 @@ interface Idea {
   createdAt: string;
 }
 
+function autoGrow(el: HTMLTextAreaElement | null) {
+  if (!el) return;
+  el.style.height = "auto";
+  el.style.height = `${el.scrollHeight}px`;
+}
+
+function extractTags(text: string): string[] {
+  const matches = text.match(/#(\w+)/g) || [];
+  return Array.from(new Set(matches.map((t) => t.slice(1).toLowerCase())));
+}
+
+function renderContent(text: string) {
+  return text.split(/(#\w+)/g).map((part, i) =>
+    part.startsWith("#") ? (
+      <span key={i} style={{ color: "var(--accent)" }}>{part}</span>
+    ) : (
+      part
+    )
+  );
+}
+
 export default function IdeasPage() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [input, setInput] = useState("");
-  const [tagInput, setTagInput] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const captureRef = useRef<HTMLInputElement>(null);
+  const [filterTag, setFilterTag] = useState<string | null>(null);
+  const captureRef = useRef<HTMLTextAreaElement>(null);
 
   async function load() {
     setLoading(true);
@@ -48,14 +69,12 @@ export default function IdeasPage() {
 
   async function add() {
     if (!input.trim()) return;
-    const tags = tagInput.split(",").map((t) => t.trim()).filter(Boolean);
     await fetch("/api/ideas", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: input.trim(), tags }),
+      body: JSON.stringify({ content: input.trim(), tags: extractTags(input) }),
     });
     setInput("");
-    setTagInput("");
     load();
   }
 
@@ -64,78 +83,104 @@ export default function IdeasPage() {
     load();
   }
 
+  const allTags = Array.from(new Set(ideas.flatMap((i) => i.tags))).sort();
+  const filtered = filterTag ? ideas.filter((i) => i.tags.includes(filterTag)) : ideas;
+
   return (
     <div>
       <h1 className="font-caveat mb-1" style={{ fontSize: 48, color: "var(--ink)" }}>Ideas</h1>
-      <p className="text-sm mb-6" style={{ color: "var(--dim)" }}>Quick capture — ⌘N to focus</p>
+      <p className="text-sm mb-6" style={{ color: "var(--dim)" }}>
+        Quick capture — ⌘N to focus · use #tags inline
+      </p>
 
-      {/* Capture bar */}
-      <div className="mb-8 p-4 rounded-2xl space-y-3" style={{ border: "1px solid var(--line)", background: "var(--bg)" }}>
-        <input
+      {/* Capture — borderless, bottom rule */}
+      <div className="pb-5 mb-8" style={{ borderBottom: "1px solid var(--line)" }}>
+        <textarea
           ref={captureRef}
-          type="text"
-          placeholder="Capture an idea… (Enter to save)"
+          placeholder="Capture an idea… #tag anywhere in the text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && add()}
-          className="w-full text-sm outline-none"
-          style={{ background: "transparent", color: "var(--ink)" }}
+          onInput={(e) => autoGrow(e.currentTarget)}
+          rows={1}
+          className="w-full text-base outline-none resize-none overflow-hidden"
+          style={{ background: "transparent", color: "var(--ink)", lineHeight: 1.6 }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              add();
+            }
+          }}
         />
-        <div className="flex gap-2 items-center">
-          <input
-            type="text"
-            placeholder="Tags: design, build, read (comma separated)"
-            value={tagInput}
-            onChange={(e) => setTagInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && add()}
-            className="flex-1 text-xs outline-none"
-            style={{ background: "transparent", color: "var(--dim)" }}
-          />
-          <button
-            onClick={add}
-            className="px-3 py-1.5 rounded-lg text-xs"
-            style={{ background: "var(--ink)", color: "var(--bg)" }}
-          >
-            Capture
-          </button>
-        </div>
+        {input.trim() && (
+          <div className="flex justify-end mt-2">
+            <button
+              onClick={add}
+              className="text-sm font-medium transition-opacity hover:opacity-70"
+              style={{ color: "var(--accent)" }}
+            >
+              Capture
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Tag filter */}
+      {allTags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button
+            onClick={() => setFilterTag(null)}
+            className="text-xs px-3 py-1 rounded-full transition-colors"
+            style={{
+              background: !filterTag ? "var(--ink)" : "var(--hi)",
+              color: !filterTag ? "var(--bg)" : "var(--dim)",
+              border: "1px solid var(--line)",
+            }}
+          >
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setFilterTag(filterTag === tag ? null : tag)}
+              className="text-xs px-3 py-1 rounded-full transition-colors"
+              style={{
+                background: filterTag === tag ? "var(--ink)" : "var(--hi)",
+                color: filterTag === tag ? "var(--bg)" : "var(--dim)",
+                border: "1px solid var(--line)",
+              }}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+      )}
 
       {loading && <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>Loading…</p>}
       {error && <ErrorState onRetry={load} />}
 
-      {!loading && ideas.length === 0 && (
-        <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>No ideas yet. Capture one above.</p>
+      {!loading && filtered.length === 0 && (
+        <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>
+          {filterTag ? `No ideas tagged #${filterTag}.` : "No ideas yet. Capture one above."}
+        </p>
       )}
 
-      <div className="space-y-3">
-        {ideas.map((idea) => (
+      <div className="space-y-5">
+        {filtered.map((idea) => (
           <div
             key={idea.id}
-            className="idea-card p-4 rounded-xl group flex gap-4"
+            className="group flex gap-4 pb-5"
+            style={{ borderBottom: "1px solid var(--line)" }}
           >
             <div className="flex-1 min-w-0">
               <p
-                className="text-sm whitespace-pre-wrap break-words"
+                className="text-base whitespace-pre-wrap break-words"
                 style={{ color: "var(--ink)", lineHeight: 1.6 }}
               >
-                {idea.content}
+                {renderContent(idea.content)}
               </p>
-              <div className="flex items-center gap-2 mt-2 flex-wrap">
-                <span className="text-xs" style={{ color: "var(--dim)" }}>
-                  {format(new Date(idea.createdAt), "MMM d, yyyy")}
-                </span>
-                {idea.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    title={tag}
-                    className="text-xs px-2 py-0.5 rounded-full max-w-[10rem] truncate"
-                    style={{ background: "var(--hi)", color: "var(--dim)", border: "1px solid var(--line)" }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+              <span className="text-xs mt-2 block" style={{ color: "var(--dim)" }}>
+                {format(new Date(idea.createdAt), "MMM d, yyyy")}
+              </span>
             </div>
             <button
               onClick={() => remove(idea.id)}

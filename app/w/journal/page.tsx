@@ -92,42 +92,42 @@ export default function JournalPage() {
   return (
     <div>
       <h1 className="font-caveat mb-1" style={{ fontSize: 48, color: "var(--ink)" }}>Journal</h1>
-      <p className="text-sm mb-8" style={{ color: "var(--dim)" }}>{notes.length} {notes.length === 1 ? "entry" : "entries"}</p>
+      <p className="text-sm mb-10" style={{ color: "var(--dim)" }}>{notes.length} {notes.length === 1 ? "entry" : "entries"}</p>
 
-      {/* New entry */}
-      <div className="rounded-2xl p-5 mb-10" style={{ border: "1px solid var(--line)" }}>
-        <div className="flex items-center gap-3 mb-3">
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="text-sm outline-none"
-            style={{ background: "transparent", color: "var(--dim)", border: "none" }}
-          />
-        </div>
+      {/* New entry — borderless, just a bottom rule */}
+      <div className="pb-6 mb-12" style={{ borderBottom: "1px solid var(--line)" }}>
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className="text-xs outline-none mb-3"
+          style={{ background: "transparent", color: "var(--dim)", border: "none" }}
+        />
         <textarea
           ref={composeRef}
           placeholder="Write something…"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           onInput={(e) => autoGrow(e.currentTarget)}
-          rows={4}
-          className="w-full text-sm outline-none resize-none overflow-hidden"
-          style={{ background: "transparent", color: "var(--ink)", minHeight: "6rem" }}
+          rows={3}
+          className="w-full text-base outline-none resize-none overflow-hidden"
+          style={{ background: "transparent", color: "var(--ink)", lineHeight: 1.7 }}
           onKeyDown={(e) => {
             if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) save();
           }}
         />
-        <div className="flex justify-end mt-3">
-          <button
-            onClick={save}
-            disabled={saving || !content.trim()}
-            className="px-4 py-2 rounded-xl text-sm disabled:opacity-40"
-            style={{ background: "var(--ink)", color: "var(--bg)" }}
-          >
-            {saving ? "Saving…" : "Save entry"}
-          </button>
-        </div>
+        {content.trim() && (
+          <div className="flex justify-end mt-2">
+            <button
+              onClick={save}
+              disabled={saving}
+              className="text-sm font-medium disabled:opacity-40 transition-opacity hover:opacity-70"
+              style={{ color: "var(--accent)" }}
+            >
+              {saving ? "Saving…" : "Save entry"}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Entries */}
@@ -138,45 +138,24 @@ export default function JournalPage() {
         <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>No entries yet.</p>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-8">
         {notes.map((note) => (
-          <div key={note.id} className="group">
-            <p className="text-xs font-medium mb-2" style={{ color: "var(--dim)" }}>
-              {formatDisplay(note.date)}
-            </p>
-            <div className="rounded-2xl p-5" style={{ border: "1px solid var(--line)", background: "var(--bg)" }}>
-              {editId === note.id ? (
-                <textarea
-                  ref={autoGrow}
-                  autoFocus
-                  value={editContent}
-                  onChange={(e) => setEditContent(e.target.value)}
-                  onInput={(e) => autoGrow(e.currentTarget)}
-                  rows={4}
-                  className="w-full text-sm outline-none resize-none overflow-hidden"
-                  style={{ background: "transparent", color: "var(--ink)", minHeight: "6rem" }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Escape") setEditId(null);
-                    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveEdit(note.id);
-                  }}
-                />
-              ) : (
-                <p
-                  className="text-sm whitespace-pre-wrap cursor-text"
-                  style={{ color: "var(--ink)", lineHeight: 1.7 }}
-                  onClick={() => { setEditId(note.id); setEditContent(note.content); }}
-                >
-                  {note.content}
-                </p>
-              )}
-
-              <div className="flex items-center justify-end gap-3 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div
+            key={note.id}
+            className="group pb-8"
+            style={{ borderBottom: "1px solid var(--line)" }}
+          >
+            <div className="flex items-start justify-between gap-4 mb-2">
+              <p className="text-xs font-medium" style={{ color: "var(--dim)" }}>
+                {formatDisplay(note.date)}
+              </p>
+              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
                 {editId === note.id ? (
                   <>
-                    <button onClick={() => setEditId(null)} className="text-xs" style={{ color: "var(--dim)" }}>Cancel</button>
+                    <button onClick={() => setEditId(null)} className="text-xs px-1" style={{ color: "var(--dim)" }}>Cancel</button>
                     <button
                       onClick={() => saveEdit(note.id)}
-                      className="text-xs px-3 py-1 rounded-lg"
+                      className="text-xs px-2 py-0.5 rounded-lg"
                       style={{ background: "var(--ink)", color: "var(--bg)" }}
                     >
                       Save
@@ -202,6 +181,31 @@ export default function JournalPage() {
                 )}
               </div>
             </div>
+
+            {editId === note.id ? (
+              <textarea
+                ref={autoGrow}
+                autoFocus
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                onInput={(e) => autoGrow(e.currentTarget)}
+                rows={3}
+                className="w-full text-base outline-none resize-none overflow-hidden"
+                style={{ background: "transparent", color: "var(--ink)", lineHeight: 1.7 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setEditId(null);
+                  if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) saveEdit(note.id);
+                }}
+              />
+            ) : (
+              <p
+                className="text-base whitespace-pre-wrap cursor-text"
+                style={{ color: "var(--ink)", lineHeight: 1.7 }}
+                onClick={() => { setEditId(note.id); setEditContent(note.content); }}
+              >
+                {note.content}
+              </p>
+            )}
           </div>
         ))}
       </div>

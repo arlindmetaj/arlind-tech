@@ -4,14 +4,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
-  CalendarDays,
-  CheckSquare,
-  Target,
   Lightbulb,
   BookOpen,
-  Bookmark,
   NotebookPen,
-  StickyNote,
   Sun,
   Moon,
   X,
@@ -24,14 +19,9 @@ interface SidebarProps {
 }
 
 const privateNav = [
-  { href: "/w/week", label: "This week", Icon: CalendarDays },
-  { href: "/w/todos", label: "Todos", Icon: CheckSquare },
-  { href: "/w/goals", label: "Goals", Icon: Target },
   { href: "/w/journal", label: "Journal", Icon: NotebookPen },
-  { href: "/w/notes", label: "Notes", Icon: StickyNote },
   { href: "/w/ideas", label: "Ideas", Icon: Lightbulb },
   { href: "/w/books", label: "Books", Icon: BookOpen },
-  { href: "/w/bookmarks", label: "Bookmarks", Icon: Bookmark },
 ];
 
 export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarProps) {
@@ -112,13 +102,7 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <p
-          className="px-2 mb-1.5 text-xs font-semibold uppercase tracking-widest"
-          style={{ color: "var(--dim)" }}
-        >
-          Dashboard
-        </p>
+      <nav className="flex-1 overflow-y-auto px-3 py-5 space-y-1">
         {privateNav.map((item) => {
           const active = pathname === item.href;
           return (
@@ -128,7 +112,7 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
                 onClose?.();
                 router.push(item.href);
               }}
-              className="w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-sm transition-colors text-left"
+              className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-colors text-left"
               style={{
                 color: active ? "var(--accent)" : "var(--ink)",
                 background: active ? "var(--hi)" : "transparent",
@@ -136,7 +120,7 @@ export default function Sidebar({ loggedIn, isOpen = false, onClose }: SidebarPr
               }}
             >
               <item.Icon
-                size={14}
+                size={15}
                 style={{
                   color: active ? "var(--accent)" : "var(--dim)",
                   flexShrink: 0,

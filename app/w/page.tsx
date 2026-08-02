@@ -3,20 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format, parseISO, isToday } from "date-fns";
-import { Target, CheckSquare, NotebookPen, StickyNote, Pin, ArrowUpRight } from "lucide-react";
-
-interface Goal {
-  id: string;
-  title: string;
-  progress: number;
-  category: "PROFESSIONAL" | "PERSONAL";
-}
-
-interface Todo {
-  id: string;
-  title: string;
-  done: boolean;
-}
+import { ArrowUpRight } from "lucide-react";
 
 interface Note {
   id: string;
@@ -24,51 +11,49 @@ interface Note {
   date: string;
 }
 
-interface Memo {
+interface Idea {
+  id: string;
+  content: string;
+  createdAt: string;
+}
+
+interface Book {
   id: string;
   title: string;
-  content: string;
-  pinned: boolean;
-  updatedAt: string;
+  author: string;
+  status: "READING" | "FINISHED" | "WANT";
+  progress: number;
 }
 
 export default function Dashboard() {
   const router = useRouter();
-  const [goals, setGoals] = useState<Goal[]>([]);
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
-  const [memos, setMemos] = useState<Memo[]>([]);
+  const [ideas, setIdeas] = useState<Idea[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
-      fetch("/api/goals").then((r) => r.json()),
-      fetch("/api/todos").then((r) => r.json()),
       fetch("/api/notes").then((r) => r.json()),
-      fetch("/api/memos").then((r) => r.json()),
-    ]).then(([g, t, n, m]) => {
-      setGoals(Array.isArray(g) ? g : []);
-      setTodos(Array.isArray(t) ? t : []);
+      fetch("/api/ideas").then((r) => r.json()),
+      fetch("/api/books").then((r) => r.json()),
+    ]).then(([n, i, b]) => {
       setNotes(Array.isArray(n) ? n : []);
-      setMemos(Array.isArray(m) ? m : []);
+      setIdeas(Array.isArray(i) ? i : []);
+      setBooks(Array.isArray(b) ? b : []);
       setLoading(false);
     }).catch(() => setLoading(false));
   }, []);
-
-  const activeGoals = goals.filter((g) => g.progress < 100);
-  const professionalGoals = activeGoals.filter((g) => g.category === "PROFESSIONAL");
-  const personalGoals = activeGoals.filter((g) => g.category === "PERSONAL");
-  const topGoal = [...activeGoals].sort((a, b) => b.progress - a.progress)[0];
-
-  const pendingTodos = todos.filter((t) => !t.done);
-  const doneTodos = todos.filter((t) => t.done);
 
   const lastNote = [...notes].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )[0];
 
-  // API already returns memos sorted: pinned first, then most-recently updated.
-  const topMemo = memos[0];
+  // API returns ideas ordered by createdAt desc already.
+  const recentIdeas = ideas.slice(0, 3);
+
+  const readingBooks = books.filter((b) => b.status === "READING");
+  const wantBooks = books.filter((b) => b.status === "WANT");
 
   const hour = new Date().getHours();
   const greeting =
@@ -80,10 +65,10 @@ export default function Dashboard() {
       className="fixed left-0 lg:left-[220px] right-0 bottom-0 overflow-y-auto"
       style={{ top: 40 }}
     >
-      <div className="max-w-4xl mx-auto px-6 sm:px-10 py-10">
+      <div className="max-w-3xl mx-auto px-6 sm:px-10 py-12">
 
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-12">
           <p
             className="text-xs uppercase tracking-widest mb-2"
             style={{ color: "var(--dim)" }}
@@ -96,196 +81,151 @@ export default function Dashboard() {
           >
             {greeting}, Arlind
           </h1>
-          <p className="text-sm mt-3 italic" style={{ color: "var(--dim)" }}>
-            Hard work, dedication and perseverance.
-          </p>
         </div>
 
         {loading ? (
           <p className="text-sm" style={{ color: "var(--dim)" }}>Loading…</p>
         ) : (
-          <>
-            {/* KPI strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-              <Kpi label="Active goals" value={activeGoals.length} />
-              <Kpi label="Todos left" value={pendingTodos.length} />
-              <Kpi label="Journal entries" value={notes.length} />
-              <Kpi label="Notes" value={memos.length} />
-            </div>
+          <div className="space-y-10">
 
-            {/* Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Journal */}
+            <button
+              className="w-full text-left group"
+              onClick={() => router.push("/w/journal")}
+            >
+              <SectionHead
+                label="Journal"
+                count={`${notes.length} ${notes.length === 1 ? "entry" : "entries"}`}
+              />
+              {!lastNote ? (
+                <p className="text-sm" style={{ color: "var(--dim)" }}>
+                  Nothing written yet — start today's entry.
+                </p>
+              ) : (
+                <>
+                  <p className="text-xs mb-2" style={{ color: "var(--dim)" }}>
+                    {isToday(parseISO(lastNote.date))
+                      ? "Today"
+                      : format(parseISO(lastNote.date), "MMMM d, yyyy")}
+                  </p>
+                  <p
+                    className="text-base whitespace-pre-wrap"
+                    style={{
+                      color: "var(--ink)",
+                      lineHeight: 1.7,
+                      display: "-webkit-box",
+                      WebkitLineClamp: 4,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {lastNote.content}
+                  </p>
+                </>
+              )}
+            </button>
 
-              {/* Goals */}
+            <div style={{ borderTop: "1px solid var(--line)" }} />
+
+            <div className="grid sm:grid-cols-2 gap-x-10 gap-y-10">
+
+              {/* Ideas */}
               <button
-                className="dash-card rounded-2xl p-5 text-left sm:col-span-2"
-                onClick={() => router.push("/w/goals")}
+                className="text-left group"
+                onClick={() => router.push("/w/ideas")}
               >
-                <CardHead Icon={Target} title="Goals" />
-                {activeGoals.length === 0 ? (
-                  <p className="text-sm" style={{ color: "var(--dim)" }}>No active goals.</p>
+                <SectionHead label="Ideas" count={`${ideas.length} captured`} />
+                {recentIdeas.length === 0 ? (
+                  <p className="text-sm" style={{ color: "var(--dim)" }}>
+                    Capture your first idea.
+                  </p>
                 ) : (
-                  <div className="flex items-start gap-8">
-                    <div className="flex gap-6 shrink-0">
-                      <div>
-                        <p className="text-2xl font-semibold" style={{ color: "var(--ink)" }}>{professionalGoals.length}</p>
-                        <p className="text-xs mt-0.5" style={{ color: "var(--dim)" }}>professional</p>
-                      </div>
-                      <div>
-                        <p className="text-2xl font-semibold" style={{ color: "var(--ink)" }}>{personalGoals.length}</p>
-                        <p className="text-xs mt-0.5" style={{ color: "var(--dim)" }}>personal</p>
-                      </div>
-                    </div>
-                    {topGoal && (
-                      <div className="flex-1 min-w-0 pl-8" style={{ borderLeft: "1px solid var(--line)" }}>
-                        <div className="flex items-center justify-between mb-1.5">
-                          <span className="text-xs truncate" style={{ color: "var(--dim)" }}>{topGoal.title}</span>
-                          <span className="text-xs font-mono ml-3" style={{ color: "var(--dim)" }}>{topGoal.progress}%</span>
-                        </div>
-                        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "var(--line)" }}>
-                          <div
-                            className="h-1.5 rounded-full transition-all"
-                            style={{ width: `${topGoal.progress}%`, background: "var(--accent)" }}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </button>
-
-              {/* Todos */}
-              <button
-                className="dash-card rounded-2xl p-5 text-left"
-                onClick={() => router.push("/w/todos")}
-              >
-                <CardHead Icon={CheckSquare} title="Todos" />
-                {todos.length === 0 ? (
-                  <p className="text-sm" style={{ color: "var(--dim)" }}>Nothing here yet.</p>
-                ) : (
-                  <div>
-                    <div className="flex items-center gap-6 mb-3">
-                      <div>
-                        <p className="text-2xl font-semibold" style={{ color: "var(--ink)" }}>{pendingTodos.length}</p>
-                        <p className="text-xs mt-0.5" style={{ color: "var(--dim)" }}>remaining</p>
-                      </div>
-                      <div>
-                        <p className="text-2xl font-semibold" style={{ color: "var(--dim)" }}>{doneTodos.length}</p>
-                        <p className="text-xs mt-0.5" style={{ color: "var(--dim)" }}>done</p>
-                      </div>
-                    </div>
-                    {pendingTodos[0] && (
-                      <div className="pt-3" style={{ borderTop: "1px solid var(--line)" }}>
-                        <p className="text-xs mb-1" style={{ color: "var(--dim)" }}>Next up</p>
-                        <p className="text-sm truncate" style={{ color: "var(--ink)" }}>{pendingTodos[0].title}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </button>
-
-              {/* Journal */}
-              <button
-                className="dash-card rounded-2xl p-5 text-left"
-                onClick={() => router.push("/w/journal")}
-              >
-                <CardHead Icon={NotebookPen} title="Journal" />
-                {!lastNote ? (
-                  <p className="text-sm" style={{ color: "var(--dim)" }}>No entries yet.</p>
-                ) : (
-                  <div>
-                    <p className="text-xs mb-2" style={{ color: "var(--dim)" }}>
-                      {isToday(parseISO(lastNote.date))
-                        ? "Today"
-                        : format(parseISO(lastNote.date), "MMMM d, yyyy")}
-                    </p>
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{
-                        color: "var(--ink)",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 3,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {lastNote.content}
-                    </p>
-                  </div>
-                )}
-              </button>
-
-              {/* Notes */}
-              <button
-                className="dash-card rounded-2xl p-5 text-left sm:col-span-2"
-                onClick={() => router.push("/w/notes")}
-              >
-                <CardHead Icon={StickyNote} title="Notes" />
-                {!topMemo ? (
-                  <p className="text-sm" style={{ color: "var(--dim)" }}>No notes yet.</p>
-                ) : (
-                  <div>
-                    {topMemo.title && (
-                      <p className="text-sm font-semibold mb-1 flex items-center gap-1.5" style={{ color: "var(--ink)" }}>
-                        {topMemo.pinned && <Pin size={12} fill="var(--accent)" style={{ color: "var(--accent)" }} />}
-                        {topMemo.title}
+                  <div className="space-y-2.5">
+                    {recentIdeas.map((idea) => (
+                      <p
+                        key={idea.id}
+                        className="text-sm"
+                        style={{
+                          color: "var(--ink)",
+                          lineHeight: 1.5,
+                          display: "-webkit-box",
+                          WebkitLineClamp: 1,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {idea.content}
                       </p>
-                    )}
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{
-                        color: "var(--dim)",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}
-                    >
-                      {topMemo.content || "—"}
-                    </p>
+                    ))}
                   </div>
                 )}
               </button>
 
+              {/* Books */}
+              <button
+                className="text-left group"
+                onClick={() => router.push("/w/books")}
+              >
+                <SectionHead
+                  label="Books"
+                  count={
+                    readingBooks.length > 0
+                      ? `${readingBooks.length} reading`
+                      : `${books.length} total`
+                  }
+                />
+                {readingBooks.length > 0 ? (
+                  <div className="space-y-3">
+                    {readingBooks.slice(0, 2).map((book) => (
+                      <div key={book.id}>
+                        <p className="text-sm font-medium truncate" style={{ color: "var(--ink)" }}>
+                          {book.title}
+                        </p>
+                        <div className="flex items-center gap-2 mt-1.5">
+                          <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "var(--line)" }}>
+                            <div
+                              className="h-1 rounded-full"
+                              style={{ width: `${book.progress}%`, background: "var(--accent)" }}
+                            />
+                          </div>
+                          <span className="text-xs font-mono shrink-0" style={{ color: "var(--dim)" }}>
+                            {book.progress}%
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : wantBooks[0] ? (
+                  <div>
+                    <p className="text-xs mb-1" style={{ color: "var(--dim)" }}>Up next</p>
+                    <p className="text-sm font-medium truncate" style={{ color: "var(--ink)" }}>
+                      {wantBooks[0].title}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-sm" style={{ color: "var(--dim)" }}>No books yet.</p>
+                )}
+              </button>
+
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
   );
 }
 
-function Kpi({ label, value }: { label: string; value: number }) {
+function SectionHead({ label, count }: { label: string; count: string }) {
   return (
-    <div
-      className="rounded-2xl px-4 py-3"
-      style={{ border: "1px solid var(--line)", background: "var(--hi)" }}
-    >
-      <p className="text-2xl font-semibold leading-none" style={{ color: "var(--ink)" }}>{value}</p>
-      <p className="text-xs mt-1.5" style={{ color: "var(--dim)" }}>{label}</p>
-    </div>
-  );
-}
-
-function CardHead({
-  Icon,
-  title,
-}: {
-  Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>;
-  title: string;
-}) {
-  return (
-    <div className="flex items-center justify-between mb-4">
-      <div className="flex items-center gap-2">
-        <Icon size={14} style={{ color: "var(--dim)" }} />
-        <span
-          className="text-xs font-semibold uppercase tracking-widest"
-          style={{ color: "var(--dim)" }}
-        >
-          {title}
-        </span>
-      </div>
-      <ArrowUpRight size={14} style={{ color: "var(--dim)" }} />
+    <div className="flex items-center justify-between mb-3">
+      <span className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--dim)" }}>
+        {label} · {count}
+      </span>
+      <ArrowUpRight
+        size={14}
+        className="opacity-0 group-hover:opacity-100 transition-opacity"
+        style={{ color: "var(--dim)" }}
+      />
     </div>
   );
 }

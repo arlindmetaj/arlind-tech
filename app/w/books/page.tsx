@@ -108,23 +108,13 @@ export default function BooksPage() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-end justify-between mb-6">
-        <div>
-          <h1 className="font-caveat mb-1" style={{ fontSize: 48, color: "var(--ink)" }}>
-            Books
-          </h1>
-          <p className="text-sm" style={{ color: "var(--dim)" }}>
-            {books.length} book{books.length !== 1 ? "s" : ""}
-          </p>
-        </div>
-        <button
-          onClick={() => setShowAdd(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm transition-opacity hover:opacity-75"
-          style={{ background: "var(--ink)", color: "var(--bg)" }}
-        >
-          <Plus size={14} />
-          Add book
-        </button>
+      <div className="mb-6">
+        <h1 className="font-caveat mb-1" style={{ fontSize: 48, color: "var(--ink)" }}>
+          Books
+        </h1>
+        <p className="text-sm" style={{ color: "var(--dim)" }}>
+          {books.length} book{books.length !== 1 ? "s" : ""}
+        </p>
       </div>
 
       {/* Tabs */}
@@ -150,15 +140,19 @@ export default function BooksPage() {
         <p className="text-sm py-8 text-center" style={{ color: "var(--dim)" }}>Loading…</p>
       )}
 
-      {!loading && filtered.length === 0 && (
-        <p className="text-sm py-12 text-center" style={{ color: "var(--dim)" }}>
-          No books here yet.
-        </p>
-      )}
-
       {/* Card grid */}
-      {!loading && filtered.length > 0 && (
+      {!loading && (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {/* Add tile */}
+          <button
+            onClick={() => setShowAdd(true)}
+            className="aspect-[2/3] rounded-2xl flex flex-col items-center justify-center gap-2 transition-colors"
+            style={{ border: "1px dashed var(--line)", color: "var(--dim)" }}
+          >
+            <Plus size={20} />
+            <span className="text-xs font-medium">Add book</span>
+          </button>
+
           {filtered.map((book) => {
             const color = coverColor(book.title);
             return (
